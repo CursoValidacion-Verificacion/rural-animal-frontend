@@ -1,0 +1,103 @@
+// Variables de colores
+$primary-color: #77c040;
+$secondary-color: #333333;
+$third-color: #ffcb40;
+$text-white: #ffffff;
+$text-muted: #b5b9bd;
+$card-radius: 15px;
+$cool-color: #d3e97a;
+.table-container {
+  max-width: 1100px;
+  margin: 20px auto;
+  overflow-x: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Centrar la tabla */
+}
+
+.table {
+  width: 800px;
+  /* Para usar todo el ancho disponible */
+  max-width: 100%;
+  /* Evitar sobrepasar el contenedor */
+  min-width: 600px;
+  /* Asegurar un ancho mínimo para tablas pequeñas */
+  text-align: left;
+}
+
+.td-button {
+  display: flex;
+  justify-content: center;
+  /* Centrar el botón horizontalmente */
+  align-items: center;
+  /* Centrar el botón verticalmente */
+}
+
+/* Contenedor para los botones */
+
+.modal-footer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  /* Espacio entre los botones */
+  margin-top: 20px;
+  /* Espacio desde el contenido del modal */
+}
+
+/* Botones de acción */
+
+#confirm,
+#cancel {
+  display: inline-block;
+  height: 35px;
+  width: 120px;
+  /* Ajusta el tamaño de los botones */
+  padding: 2px 8px;
+  border: none;
+  border-radius: 5px;
+  background-color: $primary-color;
+  color: $text-white;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: $secondary-color;
+  }
+  &:active {
+    transform: translateY(2px);
+    /* Efecto de presionar el botón */
+  }
+}
+
+#cancel {
+  background-color: $text-white;
+  color: #dc2626;
+  border: 1px solid #dc2626;
+  &:hover {
+    background-color: #dc2626;
+    color: white;
+  }
+}
+
+#new-transaction {
+  display: inline-block;
+  height: 35px;
+  width: auto;
+  padding: 5px 20px;
+  /* Ajusta el relleno para un mejor espaciado */
+  margin: 0 auto;
+  border: none;
+  border-radius: 5px;
+  background-color: $primary-color;
+  color: $text-white;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#new-transaction:hover {
+  background-color: $secondary-color;
+}

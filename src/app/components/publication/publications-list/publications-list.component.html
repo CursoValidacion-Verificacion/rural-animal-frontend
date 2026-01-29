@@ -1,0 +1,131 @@
+<script src="../../../services/publication.service.ts"></script>
+<div>
+    <div class="filters">
+        <div class="filter-item">
+            <label class="label-inline">Ordenar por:</label>
+            <div class="select-container">
+                <select (change)="filterPublications($event, 'sort')">
+                    <option value="">--Seleccione--</option>
+                    <option value="precio">Precio</option>
+                    <option value="especie">Especie</option>
+                </select>
+                <i class="fa-solid fa-angle-down"></i>
+            </div>
+        </div>
+        <div class="filter-item">
+            <label class="label-inline">Filtrar por tipo:</label>
+            <div class="select-container">
+                <select (change)="filterPublications($event, 'type')">
+                    <option value="">--Seleccione--</option>
+                    <option value="Venta">Venta</option>
+                    <option value="Subasta">Subasta</option>
+                </select>
+                <i class="fa-solid fa-angle-down"></i>
+            </div>
+        </div>
+        <div class="filter-item">
+            <label class="label-inline">Buscar:</label>
+            <div class="search-container">
+                <input
+                        type="text"
+                        placeholder="Buscar"
+                        class="search-input"
+                        (input)="filterPublications($event, 'search')"
+                />
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            </div>
+        </div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Foto</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Título</th>
+            <th scope="col">Especie</th>
+            <th scope="col">Raza</th>
+            <th scope="col">Género</th>
+            <th scope="col">Peso</th>
+            <th style="display: none" scope="col">Fecha de nacimiento</th>
+            <th scope="col">Precio</th>
+            <th class="text-center" scope="col">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+            @for (item of filteredPublications; track item.id) {
+                <tr>
+                    <th scope="row">{{ item.id }}</th>
+                    <td>
+                        @if (item.photos?.[0]?.url) {
+                            <img
+                                    [src]="item.photos?.[0]?.url"
+                                    alt="Imagen"
+                                    style="width: 50px; height: 40px; object-fit: cover"
+                            />
+                            @if (!item.photos?.[0]?.url) {
+                                <span>No hay imagen</span>
+                            }
+                        }
+                    </td>
+                    <td>{{ item.type }}</td>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.specie }}</td>
+                    <td>{{ item.race }}</td>
+                    <td>{{ item.gender }}</td>
+                    <td>{{ item.weight }} Kg</td>
+                    <th style="display: none" scope="col">Fecha de nacimiento</th>
+                    <td>₡{{ item.price }}</td>
+                    <!--Crear el if para el suepruser-->
+                    <!--<td>{{ item.user?.name }}</td>-->
+                    <td>
+                        <button
+                                (click)="callEditionAction.emit(item)"
+                                class="btn-edit"
+                                type="button"
+                        >
+                            <i class="fa-solid fa-pencil"></i>
+                        </button>
+                        <button
+                                (click)="modalService.displayModal('md', deleteConfirmationModal)"
+                                class="btn-delete"
+                                type="button"
+                        >
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr>
+
+                <!-- Modal de confirmación de eliminación -->
+                <ng-template #deleteConfirmationModal>
+                    <app-modal [hideFooter]="true">
+                        <h1>
+                            ¿Realmente desea eliminar la publicación: {{ item?.title }}?
+                        </h1>
+                        <div class="modal-footer">
+                            <button
+                                    id="confirm"
+                                    (click)="callDeleteAction.emit(item)"
+                                    (click)="modalService.closeAll()"
+                            >
+                                Confirmar
+                            </button>
+                            <button id="cancel" (click)="modalService.closeAll()">
+                                Cancelar
+                            </button>
+                        </div>
+                    </app-modal>
+                </ng-template>
+
+            } @empty {
+                <tr>
+                    <td colspan="11">
+                        <div class="d-flex justify-content-center align-items-center w-100">
+                            <p class="mb-0">No hay publicaciones</p>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,65 @@
+// Variables de colores
+$primary-color: #77c040;
+$secondary-color: #333333;
+$third-color: #ffcb40;
+$text-white: #ffffff;
+$text-muted: #b5b9bd;
+$card-radius: 15px;
+$cool-color: #d3e97a;
+.users-cont {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; // Elimina el desplazamiento vertical
+  .row {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    overflow-y: hidden; // Solo permite scroll interno si es necesario
+  }
+  .col-12 {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .d-flex {
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  text-decoration: none;
+  background-color: $third-color;
+  color: #333333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  &:hover {
+    color: $text-white;
+  }
+}
+
+#nuevo-registro {
+  display: inline-block;
+  height: 35px;
+  width: 200px;
+  padding: 2px 8px;
+  border: none;
+  border-radius: 5px;
+  background-color: $primary-color;
+  color: $text-white;
+  font-size: 18px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: $secondary-color;
+  }
+}

@@ -1,0 +1,44 @@
+<div id="filter">
+  <div class="form-group">
+    <label>Especie</label>
+    <select [(ngModel)]="selectedSpecies" (change)="onSpeciesChange()">
+      <option value="" disabled>--Seleccione una especie--</option>
+      <option *ngFor="let species of speciesList" [value]="species">
+        {{ species }}
+      </option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Raza</label>
+    <select [(ngModel)]="selectedBreed" (change)="onBreedChange()">
+      <option value="" disabled>--Seleccione una raza--</option>
+      <option *ngFor="let breed of breeds" [value]="breed">
+        {{ breed }}
+      </option>
+    </select>
+  </div>
+</div>
+
+<div *ngIf="selectedBreed" id="stage-container">
+  <div class="stage">
+    <h3>Etapa: 1</h3>
+    <app-animal-stage-viewer
+      [modelPath]="modelPaths.bebe"
+    ></app-animal-stage-viewer>
+  </div>
+
+  <div class="stage">
+    <h3>Etapa: 2</h3>
+    <app-animal-stage-viewer
+      [modelPath]="modelPaths.joven"
+    ></app-animal-stage-viewer>
+  </div>
+
+  <div class="stage">
+    <h3>Etapa: 3</h3>
+    <app-animal-stage-viewer
+      [modelPath]="modelPaths.adulto"
+    ></app-animal-stage-viewer>
+  </div>
+</div>

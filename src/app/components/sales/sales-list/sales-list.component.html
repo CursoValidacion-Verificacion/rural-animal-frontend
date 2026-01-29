@@ -1,0 +1,49 @@
+<div>
+  <div class="filters">
+    <div class="filter-item">
+      <label class="label-inline">Ordenar por:</label>
+      <div class="select-container">
+        <select (change)="filterPublications($event, 'sort')">
+          <option>--Seleccione--</option>
+          <option value="precio">Precio</option>
+          <option value="especie">Especie</option>
+        </select>
+        <i class="fa-solid fa-angle-down"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="sales-publications">
+    <div *ngIf="!filteredSalesPublications.length">
+      No hay publicaciones disponibles.
+    </div>
+    <div *ngFor="let publication of filteredSalesPublications" class="card">
+      <div class="card-body">
+        <img
+          *ngIf="publication.photos?.length"
+          [src]="publication.photos?.[0]?.url"
+          alt="{{ publication.title }}"
+          class="card-image"
+        />
+
+        <p class="card-title">{{ publication.title }}</p>
+        <p class="card-text">
+          Especie: {{ publication.specie }} &nbsp; Peso:
+          {{ publication.weight }} kg
+        </p>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <p class="card-price">{{ publication.price }} CRC</p>
+          <button (click)="showDetails(publication)" class="details-button">
+            Detalles
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="payment-status">
+  @if (!isProcessing) { @if (status === 'success') {
+  <div class="status-container success-container">
+    <span class="material-icons status-icon">check_circle</span>
+    <h2>¡Pago Exitoso!</h2>
+    <p>Tu pago ha sido procesado correctamente.</p>
+    <button (click)="navigateToHome()" class="btn btn-primary">
+      Ver facturas
+    </button>
+  </div>
+  } @if (status === 'error') {
+  <div class="status-container error-container">
+    <span class="material-icons status-icon">error</span>
+    <h2>Error en el Pago</h2>
+    <p>Hubo un problema al procesar tu pago.</p>
+    <button (click)="retryPayment()" class="btn btn-primary">
+      Intentar nuevamente
+    </button>
+  </div>
+  } @if (status === 'cancel') {
+  <div class="status-container cancel-container">
+    <span class="material-icons status-icon">cancel</span>
+    <h2>Pago Cancelado</h2>
+    <p>Has cancelado el proceso de pago.</p>
+    <button (click)="navigateToCart()" class="btn btn-primary">
+      Volver al carrito
+    </button>
+  </div>
+  } } @else {
+  <div class="loading-container">
+    <div class="spinner"></div>
+    <p>Procesando pago...</p>
+  </div>
+  }
+</div>

@@ -1,0 +1,54 @@
+<div class='calendar-container'>
+    <div class='calendar-sidebar'>
+        <div class='sidebar-section'>
+            <h2>Instrucciones</h2>
+            <ul>
+                <li>• Click en un evento para ver sus detalles</li>
+            </ul>
+        </div>
+        <div class='sidebar-section'>
+            <label>
+                <input
+                        type='checkbox'
+                        [checked]='calendarVisible()'
+                        (change)='handleCalendarToggle()'
+                />
+                Mostrar/Ocultar calendario
+            </label>
+        </div>
+        <div class='sidebar-section'>
+            <label>
+                <input
+                        type='checkbox'
+                        [checked]='calendarOptions().weekends'
+                        (change)='handleWeekendsToggle()'
+                />
+                Mostrar fines de semana
+            </label>
+        </div>
+        <div class='sidebar-section'>
+            <h2>Citas ({{ currentEvents().length }})</h2>
+            <ul class='event-list'>
+                <li *ngFor='let event of currentEvents()'>
+                    <b>{{ event.start }}</b>
+                    <i>{{ event.title }}</i>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class='calendar-main'>
+        @if (calendarVisible()) {
+            <full-calendar
+                #calendar
+                [options]='calendarOptions()'>
+                <ng-template #eventContent let-arg>
+                    <div class='event-content'>
+                        <b>{{ arg.timeText }}</b>
+                        <i>{{ arg.event.title }}</i>
+                    </div>
+                </ng-template>
+            </full-calendar>
+        }
+    </div>
+</div>

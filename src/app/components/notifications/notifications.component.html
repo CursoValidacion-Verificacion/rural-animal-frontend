@@ -1,0 +1,22 @@
+<div class="media profile-media d-flex align-items-center">
+  <div class="notification-icon">
+    <i class="bell-icon fa-regular fa-bell"></i>
+    <span class="notification-count" *ngIf="notificationCount() > 0">
+      {{ notificationCount() }}
+    </span>
+  </div>
+  <div class="media-body">
+    <span><i class="fa-solid fa-chevron-down"></i></span>
+  </div>
+</div>
+<ul class="notification-dropdown onhover-show-div" *ngIf="notificationCount() > 0">
+  <li *ngFor="let notification of notifications()" (click)="handdleNotification(notification)">
+    <div class="notification-icon">
+      <i class="fa-solid fa-envelope"></i>
+    </div>
+    <div class="notification-content">
+      <span>{{ notification.title }}</span>
+      <p>{{ notification.description }}</p>
+    </div>
+  </li>
+</ul>

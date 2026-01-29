@@ -1,0 +1,48 @@
+<div class="table-container table-responsive">
+  <div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Subtotal</th>
+          <th scope="col">IVA</th>
+          <th scope="col">Total</th>
+          <th scope="col">Creada</th>
+          <th class="text-center" scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of transactions; track item.id) {
+        <tr>
+          <th scope="row">{{ item.id }}</th>
+          <td>₡{{ item.subTotal }}</td>
+          <td>₡{{ item.tax }}</td>
+          <td>₡{{ item.total }}</td>
+          <td>{{ item.creationDate | date }}</td>
+          <!--Crear el if para el suepruser-->
+          <!--<td>{{ item.user?.name }}</td>-->
+          <td class="td-button">
+            <button
+              (click)="callDetails.emit(item)"
+              class="btn"
+              type="button"
+              id="new-transaction"
+            >
+              Detalle
+            </button>
+          </td>
+        </tr>
+
+        } @empty {
+        <tr>
+          <td colspan="5">
+            <div class="d-flex justify-content-center align-items-center w-100">
+              <p class="mb-0">No hay facturas</p>
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

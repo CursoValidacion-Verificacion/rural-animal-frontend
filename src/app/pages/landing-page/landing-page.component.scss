@@ -1,0 +1,351 @@
+// Variables de colores
+$primary-color: #77c040;
+$secondary-color: #333333;
+$third-color: #ffcb40;
+$text-white: #ffffff;
+$text-muted: #b5b9bd;
+$card-radius: 15px;
+$cool-color: #d3e97a;
+
+/* Header */
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: $text-white;
+  height: 90px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 40px 0px 20px;
+  .logo {
+    width: 150px;
+  }
+  nav {
+    a {
+      color: $secondary-color;
+      text-decoration: none;
+      transition: color 0.3s;
+      padding: 8px;
+      border-radius: 10%;
+      font-size: 16px;
+      &:hover {
+        color: $text-white;
+        background-color: $secondary-color;
+      }
+    }
+  }
+}
+
+#rural {
+  color: $primary-color;
+  font-size: 28px;
+  font-weight: 400;
+  margin-left: 20px;
+}
+
+#rural span {
+  color: $secondary-color;
+}
+
+/*Hero Banner*/
+
+#hero {
+  padding-top: 50px;
+  background-color: $text-white;
+}
+
+#cerdo-hero {
+  width: 700px;
+  height: 750px;
+  position: relative;
+}
+
+#btn-venta,
+#btn-subasta {
+  width: 250px;
+  height: 60px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: $text-white;
+  color: $secondary-color;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  text-decoration: none;
+  box-shadow: 0 0 5px $secondary-color;
+  font-weight: 400;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#btn-venta {
+  transform: translate(-120%, 80%);
+}
+
+#btn-subasta {
+  transform: translate(-220%, 300%);
+}
+
+#btn-venta,
+#btn-subasta {
+  &:hover {
+    background-color: $primary-color;
+    box-shadow: 0 0 5px $third-color;
+    color: $text-white;
+    font-weight: 500;
+  }
+}
+
+#hero-texto {
+  width: 550px;
+  line-height: 45px;
+}
+
+#hero-texto2 {
+  width: 500px;
+  line-height: 35px;
+  font-size: 24px;
+  font-weight: 400;
+  margin-top: 45px;
+}
+
+h2 {
+  color: $primary-color;
+  font-weight: 400;
+  font-size: 36px;
+}
+
+#btn-inicia,
+.register-button {
+  width: 200px;
+  height: 50px;
+  margin-top: 10%;
+  background-color: $third-color;
+  color: $text-white;
+  border: none;
+  border-radius: 10px;
+  font-size: 22px;
+  text-decoration: none;
+  box-shadow: 0 0 5px $third-color;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    background-color: $secondary-color;
+    box-shadow: none;
+  }
+}
+
+#mercado {
+  margin-top: 170px;
+  margin-left: 20px;
+}
+
+/*Beneficios de la plataforma*/
+
+#beneficios {
+  height: 700px;
+}
+
+li {
+  list-style-type: none;
+  font-size: 30px;
+  line-height: 50px;
+}
+
+#beneficios-plataforma {
+  padding-top: 15px;
+  margin-left: 30px;
+  font-size: 50px;
+}
+
+h3 {
+  color: $primary-color;
+  font-weight: 400;
+  font-size: 36px;
+}
+
+.cerdo-bene {
+  margin-left: 500px;
+  width: 600px;
+  height: 390px;
+  position: absolute;
+  transform: translate(10%, -25%);
+}
+
+/*Te ofrecemos*/
+
+#servicios {
+  background-color: #aee272;
+  height: 400px;
+  padding-top: 70px;
+  text-align: center;
+}
+
+#titulo-servicios {
+  color: $secondary-color;
+  /* Color del texto del título */
+  font-size: 40px;
+  margin-bottom: 80px;
+}
+
+#iconos-servicios {
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+}
+
+.servicio-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icono-circulo {
+  height: 90px;
+  width: 90px;
+  background-color: $text-white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+}
+
+.texto-servicio {
+  color: $secondary-color;
+  font-size: 24px;
+  padding-top: 10%;
+}
+
+/*Como empezar*/
+
+#empezar {
+  padding: 160px 0;
+  text-align: center;
+  height: 600px;
+  h3 {
+    color: $secondary-color;
+    font-size: 40px;
+    font-weight: 500;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .steps {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      max-width: 1000px;
+      gap: 100px;
+      padding-top: 100px;
+      .step {
+        max-width: 300px;
+        text-align: center;
+        .step-title {
+          font-size: 23px;
+          font-weight: bold;
+          color: $secondary-color;
+          margin-bottom: 40px;
+        }
+        .step-description {
+          font-size: 19px;
+          color: $secondary-color;
+          line-height: 1.5;
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+
+/*Registrate*/
+
+#registrate {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  height: 500px;
+  #registrate-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    .text-container {
+      text-align: left;
+      width: 290px;
+      h3 {
+        font-size: 38px;
+        color: $secondary-color;
+        line-height: 48px;
+        padding-bottom: 40px;
+      }
+    }
+    .image-container {
+      img {
+        width: 450px;
+        height: 550px;
+        margin-left: 250px;
+      }
+    }
+  }
+}
+
+/*Footer*/
+
+#pie-pagina {
+  background-color: $primary-color;
+  margin-top: 30px;
+  height: 200px;
+  padding-top: 50px;
+  .container {
+    display: flex;
+    justify-content: start;
+    color: #ffffff;
+    .brand-section {
+      h3 {
+        font-size: 34px;
+        font-weight: normal;
+        color: $text-white;
+        span {
+          color: $secondary-color;
+        }
+      }
+      .social-icons {
+        display: flex;
+        gap: 30px;
+        margin-top: 10px;
+        a {
+          width: 60px;
+          height: 60px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #ffffff;
+          border-radius: 5px;
+          box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+          color: #333;
+          font-size: 20px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+          &:hover {
+            background-color: $secondary-color;
+            color: $text-white;
+          }
+        }
+      }
+    }
+  }
+}

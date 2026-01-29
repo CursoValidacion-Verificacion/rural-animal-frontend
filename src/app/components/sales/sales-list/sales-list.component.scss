@@ -1,0 +1,116 @@
+// Variables de colores
+$primary-color: #77c040;
+$secondary-color: #333333;
+$third-color: #ffcb40;
+$text-white: #ffffff;
+$text-muted: #b5b9bd;
+$card-radius: 15px;
+$cool-color: #d3e97a;
+.sales-publications {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-left: 170px;
+  margin-right: 100px;
+}
+
+.card {
+  width: 250px;
+  max-height: 270px;
+  border: 1px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(206, 202, 202, 0.2);
+  background-color: $text-white;
+}
+
+.card-image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.card-body {
+  padding: 16px;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 4px 0;
+  color: $secondary-color;
+}
+
+.card-text {
+  color: #777;
+  font-size: 11px;
+}
+
+.card-price {
+  font-size: 14px;
+  font-weight: bold;
+  color: $secondary-color;
+  //margin: 8px 0;
+}
+
+.details-button {
+  display: inline-block;
+  padding: 2px 8px;
+  border: none;
+  border-radius: 5px;
+  background-color: $primary-color;
+  color: $text-white;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.details-button:hover {
+  background-color: $secondary-color;
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  padding-left: 540px;
+  gap: 1rem;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.label-inline {
+  color: #333;
+}
+
+.select-container {
+  position: relative;
+  display: inline-block;
+  width: auto;
+}
+
+.select-container select {
+  padding: 3px 8px;
+  padding-right: 30px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  cursor: pointer;
+  appearance: none;
+  outline: none;
+}
+
+.select-container i {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  /* Prevent the icon from blocking clicks */
+  color: #000;
+}

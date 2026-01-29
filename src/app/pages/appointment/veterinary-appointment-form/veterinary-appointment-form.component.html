@@ -1,0 +1,122 @@
+@if (!this.veterinaryService.isLoading$()) {
+    <div class="appointment-form">
+        <!-- progreso de pasos -->
+        <div class="progress-steps">
+            <div class="step" [class]="getStepStatus(1)">
+                <div class="step-number">1</div>
+                <div class="step-label">Fecha</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" [class]="getStepStatus(2)">
+                <div class="step-number">2</div>
+                <div class="step-label">Hora</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" [class]="getStepStatus(3)">
+                <div class="step-number">3</div>
+                <div class="step-label">Veterinario</div>
+            </div>
+        </div>
+
+        <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+            <!-- paso 1: fechas disponibles -->
+            <div class="step-content" *ngIf="currentStep() === 1" @fadeSlide>
+                <div class="section-title">
+                    <i class="bi bi-calendar-week"></i>
+                    Selecciona una fecha
+                </div>
+                <div class="date-grid mt-2">
+                    <div *ngFor="let date of veterinaryService.availability$()"
+                         class="date-card"
+                         [class.selected]="selectedDate === date.date"
+                         (click)="selectDate(date.date)">
+                        <div class="date-weekday">{{ date.date | date:'EEEE' }}</div>
+                        <div class="date-number">{{ date.date | date:'d' }}</div>
+                        <div class="date-month">{{ date.date | date:'MMM' | uppercase }}</div>
+                        <div class="selection-indicator">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- paso 2: horarios disponibles -->
+            <div class="step-content" *ngIf="currentStep() === 2" @fadeSlide>
+                <div class="section-header">
+                    <button type="button" class="back-button" (click)="goBack()">
+                        <i class="bi bi-arrow-left"></i>
+                        Volver
+                    </button>
+                    <div class="section-title">
+                        <i class="bi bi-clock"></i>
+                        Selecciona un horario
+                    </div>
+                </div>
+                <div class="time-grid">
+                    <div *ngFor="let slot of selectedTimeSlots"
+                         class="time-slot"
+                         [class.selected]="selectedTimeSlot === slot.startTime"
+                         (click)="selectTimeSlot(slot.startTime)">
+                        <div class="time-icon">
+                            <i class="bi bi-clock"></i>
+                        </div>
+                        <div class="time-range">
+                            <div class="start-time">{{ slot.startTime | date:'shortTime' }}</div>
+                            <div class="time-separator">-</div>
+                            <div class="end-time">{{ slot.endTime | date:'shortTime' }}</div>
+                        </div>
+                        <div class="selection-indicator">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- paso 3: veterinarios disponibles -->
+            <div class="step-content" *ngIf="currentStep() === 3" @fadeSlide>
+                <div class="section-header">
+                    <button type="button" class="back-button" (click)="goBack()">
+                        <i class="bi bi-arrow-left"></i>
+                        Volver
+                    </button>
+                    <div class="section-title">
+                        <i class="bi bi-person-badge"></i>
+                        Selecciona un veterinario
+                    </div>
+                </div>
+                <div class="vet-grid">
+                    <div *ngFor="let vet of availableVeterinarians"
+                         class="vet-card"
+                         [class.selected]="appointmentForm.get('selectedVeterinary')?.value === vet.id"
+                         (click)="selectVeterinarian(vet.id)">
+
+                        <div class="vet-avatar">
+                            <i class="bi bi-person-circle"></i>
+                        </div>
+                        <div class="vet-info">
+                            <div class="vet-name">{{ vet.name }}</div>
+                            <div class="vet-lastname">{{ vet.lastName1 }} {{ vet.lastName2 }}</div>
+                            <div class="vet-speciality">{{ vet.speciality }}</div>
+                        </div>
+                        <div class="selection-indicator">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="appointment-actions">
+                    <button type="submit"
+                            class="submit-button"
+                            [disabled]="!appointmentForm.valid">
+                        <i class="bi bi-calendar-check"></i>
+                        Confirmar Cita
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+} @else {
+    <app-loader/>
+}
+
+

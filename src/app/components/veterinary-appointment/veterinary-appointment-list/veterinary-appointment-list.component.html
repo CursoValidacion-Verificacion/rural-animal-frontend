@@ -1,0 +1,50 @@
+<div class="table-container table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Veterinario</th>
+        <th scope="col">Primer Apellido</th>
+        <th style="display: none" scope="col">Segundo Apellido</th>
+        <th scope="col">Correo Electrónico</th>
+        <th scope="col">Especialidad</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Fecha inicio</th>
+        <th scope="col">Fecha final</th>
+        <th style="display: none" class="text-center" scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (user of appointments; track user.id) {
+      <tr>
+        <th scope="row">{{ user.veterinaryName }}</th>
+        <td>{{ user.firstSurname }}</td>
+        <td style="display: none">{{ user.secondSurname }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.speciality }}</td>
+        <td>{{ user.status }}</td>
+        <td>{{ user.startDate | date : "dd/MM/yyyy hh:mm" }}</td>
+        <td>{{ user.endDate | date : "dd/MM/yyyy hh:mm" }}</td>
+        <td>
+          <div style="display: none" class="actions">
+            <button
+              (click)="callModalAction.emit(user)"
+              class="btn btn-warning me-2"
+              type="button"
+            >
+              <i class="fas fa-pen"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      } @empty {
+      <tr>
+        <td colspan="16">
+          <div class="d-flex justify-content-center align-items-center w-100">
+            <p class="mb-0">No hay citas registradas en el sistema.</p>
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

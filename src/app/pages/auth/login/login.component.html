@@ -1,0 +1,207 @@
+<div class="login-container" role="main">
+  <button
+    class="corner-home-btn"
+    routerLink="/"
+    aria-label="Ir a la página principal"
+  >
+    <i class="fas fa-home"></i>
+  </button>
+  <button
+    class="corner-register-btn"
+    routerLink="/signup"
+    aria-label="Ir a página de registro"
+    style="font-size: 18px"
+  >
+    Regístrate
+  </button>
+  <div class="login-card">
+    <h1 class="logo">
+      <span class="text-green me-2">Rural</span>
+      <span class="text-black">Animal</span>
+    </h1>
+
+    <div class="login-main">
+      <h2 id="login-heading">Inicia sesión</h2>
+      <p id="login-heading">Hola, bienvenido 👋</p>
+
+      <button
+        class="google-login-btn"
+        (click)="loginWithGoogle()"
+        type="button"
+        aria-label="Iniciar sesión con Google"
+      >
+        <img
+          src="assets/icons/google-icon-com.svg"
+          alt=""
+          width="20"
+          height="20"
+          role="presentation"
+        />
+        Iniciar sesión con Google
+      </button>
+
+      <div class="divider" role="separator">o inicia sesión con tu Email</div>
+
+      <form
+        (ngSubmit)="handleLogin($event)"
+        autocomplete="on"
+        #frm="ngForm"
+        aria-labelledby="login-heading"
+        novalidate
+      >
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input
+            #email="ngModel"
+            type="email"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': email.invalid && email.touched,
+              'is-valid': email.valid && email.touched
+            }"
+            id="email"
+            name="email"
+            placeholder="Ingresa tu correo"
+            [(ngModel)]="loginForm.email"
+            required
+            aria-required="true"
+            aria-describedby="email-error"
+            autocomplete="email"
+          />
+          @if (email.invalid && email.touched) {
+          <div id="email-error" class="invalid-feedback" role="alert">
+            @if (email.errors?.['required']) { Por favor ingresa tu correo
+            electrónico } @else { Por favor ingresa un correo electrónico válido
+            }
+          </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <div class="password-input-container">
+            <input
+              #password="ngModel"
+              [type]="showPassword ? 'text' : 'password'"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid': password.invalid && password.touched,
+                'is-valid': password.valid && password.touched
+              }"
+              id="password"
+              name="password"
+              placeholder="Ingresa tu contraseña"
+              [(ngModel)]="loginForm.password"
+              required
+              aria-required="true"
+              aria-describedby="password-error"
+              autocomplete="current-password"
+              minlength="6"
+            />
+            <button
+              title="Haga click para ver la contraseña"
+              type="button"
+              class="toggle-password"
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="
+                showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
+              "
+              [attr.aria-pressed]="showPassword"
+            >
+              <i
+                class="fas"
+                [class.fa-eye]="!showPassword"
+                [class.fa-eye-slash]="showPassword"
+              ></i>
+            </button>
+          </div>
+          @if (password.invalid && password.touched) {
+          <div id="password-error" class="invalid-feedback" role="alert">
+            @if (password.errors?.['required']) { Por favor ingresa tu
+            contraseña } @else if (password.errors?.['minlength']) { La
+            contraseña debe tener al menos 6 caracteres }
+          </div>
+          }
+          <a
+            class="forgot-password"
+            aria-label="Recuperar contraseña olvidada"
+            (click)="modalService.displayModal('md', restorePasswordModal)"
+            >¿Olvidaste tu contraseña?</a
+          >
+        </div>
+
+        <ng-template #restorePasswordModal>
+          <app-modal [hideFooter]="true">
+            <h1>Ingresa tu correo electrónico para restablecer la contraseña</h1>
+            <form
+            (ngSubmit)="handleRestoreLogin(frm, $event)"
+            autocomplete="on"
+            #frm="ngForm"
+            aria-labelledby="login-heading"
+            novalidate
+            >
+              <div class="form-group">
+                <label for="restoreEmail">Correo electrónico</label>
+                <input
+                  #restoreEmail="ngModel"
+                  type="email"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': restoreEmail.invalid && restoreEmail.touched,
+                    'is-valid': restoreEmail.valid && restoreEmail.touched
+                  }"
+                  id="restoreEmail"
+                  name="restoreEmail"
+                  placeholder="Ingresa tu correo"
+                  [(ngModel)]="restoreForm.restoreEmail"
+                  required
+                  aria-required="true"
+                  aria-describedby="email-error"
+                  autocomplete="correo de restauración"
+                />
+                @if (restoreEmail.invalid && restoreEmail.touched) {
+                <div id="email-error" class="invalid-feedback" role="alert">
+                  @if (restoreEmail.errors?.['required']) { Por favor ingresa tu correo
+                  electrónico } @else { Por favor ingresa un correo electrónico válido
+                  }
+                </div>
+                }
+              </div>
+              <button
+                type="submit"
+                class="register-btn"
+                [disabled]="frm.invalid"
+                aria-label="Restablecer contraseña"
+              >
+                Restablecer
+              </button>
+            </form>
+          </app-modal>
+        </ng-template>
+
+        <button
+          type="submit"
+          class="register-btn"
+          [disabled]="frm.invalid"
+          aria-label="Iniciar sesión"
+        >
+          Inicia sesión
+        </button>
+
+        @if(loginError) {
+        <p class="text-danger mt-2" role="alert">{{ loginError }}</p>
+        }
+
+        <div class="signup-link">
+          ¿Aún no estás registrado?
+          <a routerLink="/signup" aria-label="Ir a página de registro"
+            >Crea una cuenta</a
+          >
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="pig-section" role="presentation">
+    <img src="assets/img/login/pig-login.png" alt="" role="presentation" />
+  </div>
+</div>

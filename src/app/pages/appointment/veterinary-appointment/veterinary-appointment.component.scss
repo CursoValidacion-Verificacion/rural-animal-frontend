@@ -1,0 +1,40 @@
+$primary-color: #77c040;
+$secondary-color: #333333;
+$third-color: #ffcb40;
+$text-white: #ffffff;
+$text-muted: #b5b9bd;
+$card-radius: 15px;
+$cool-color: #d3e97a;
+
+button {
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  text-decoration: none;
+  background-color: $third-color;
+  color: #333333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+
+  &:hover {
+    color: $text-white;
+  }
+}
+
+.new-appointment {
+  display: inline-block;
+  height: 35px;
+  width: 200px;
+  padding: 2px 8px;
+  border: none;
+  border-radius: 5px;
+  background-color: $primary-color;
+  color: $text-white;
+  font-size: 18px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}

@@ -1,0 +1,148 @@
+$primary-color: #77c040;
+$secondary-color: #333333;
+$third-color: #ffcb40;
+$text-white: #ffffff;
+$text-muted: #b5b9bd;
+$card-radius: 15px;
+$cool-color: #d3e97a;
+
+.calendar-container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  background: $text-white;
+  border-radius: $card-radius;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  min-height: 800px;
+}
+
+.calendar-sidebar {
+  border-right: 1px solid rgba($secondary-color, 0.1);
+  padding: 1.5rem;
+
+  .sidebar-section {
+    margin-bottom: 2rem;
+
+    h2 {
+      color: $secondary-color;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    ul li {
+      color: $secondary-color;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    color: $secondary-color;
+
+    input[type="checkbox"] {
+      margin-right: 0.5rem;
+      accent-color: $third-color;
+    }
+  }
+}
+
+.calendar-main {
+  padding: 1.5rem;
+
+  ::ng-deep {
+    .fc {
+
+      .fc-toolbar-title {
+        color: $secondary-color;
+      }
+
+      .fc-daygrid-day-number {
+        color: $primary-color;
+        font-weight: 500;
+      }
+
+      .fc-col-header-cell {
+        color: $primary-color;
+        font-weight: 600;
+      }
+
+      .fc-button-primary {
+        background: $third-color;
+        border-color: $third-color;
+        color: $secondary-color;
+        font-weight: 500;
+
+        &:hover {
+          background: darken($third-color, 5%);
+          border-color: darken($third-color, 5%);
+        }
+
+        &.fc-button-active {
+          background: $primary-color;
+          border-color: $primary-color;
+          color: $text-white;
+
+          &:hover {
+            background: darken($primary-color, 5%);
+            border-color: darken($primary-color, 5%);
+          }
+        }
+      }
+
+      .fc-scrollgrid {
+        border-color: rgba($secondary-color, 0.1);
+      }
+
+      .fc-scrollgrid td,
+      .fc-scrollgrid th {
+        border-color: rgba($secondary-color, 0.1);
+      }
+
+      .fc-event {
+        background: $third-color;
+        border-color: $third-color;
+        color: $secondary-color;
+        padding: 2px 4px;
+
+        &:hover {
+          background: darken($third-color, 5%);
+        }
+      }
+
+      .fc-day-today {
+        background: rgba($cool-color, 0.2) !important;
+
+        .fc-daygrid-day-number {
+          background: $primary-color;
+          color: $text-white;
+          border-radius: 50%;
+          width: 24px;
+          height: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 5px;
+        }
+      }
+    }
+  }
+}
+
+.event-list {
+  li {
+    background: rgba($cool-color, 0.1);
+    padding: 0.75rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+
+    b {
+      color: $secondary-color;
+      display: block;
+    }
+
+    i {
+      color: $text-muted;
+    }
+  }
+}

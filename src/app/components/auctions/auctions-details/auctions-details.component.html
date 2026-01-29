@@ -1,0 +1,136 @@
+<div
+  *ngIf="publication"
+  style="display: flex; flex-direction: row; margin-top: 50px"
+>
+  <div>
+    <!-- Carousel for images -->
+    <div *ngIf="publication.photos?.length" class="carousel-container">
+      <div class="carousel-wrapper">
+        <div
+          class="carousel"
+          [style.transform]="'translateX(' + -currentIndex * 100 + '%)'"
+        >
+          <img
+            *ngFor="let photo of publication.photos"
+            [src]="photo.url"
+            [alt]="publication.title"
+            class="carousel-image"
+          />
+        </div>
+      </div>
+      <button class="carousel-button left" (click)="prev()">&#10094;</button>
+      <button class="carousel-button right" (click)="next()">&#10095;</button>
+    </div>
+  </div>
+
+  <div style="margin-left: 40px">
+    <div>
+      <div
+        class="auction-time mb-2"
+        [ngClass]="{ 'ending-soon': isEndingSoon }"
+      >
+        <p class="timer">{{ timeRemaining }}</p>
+      </div>
+      <p class="title">{{ publication.title }}</p>
+      <p class="price">{{ formatPrice(publication.price) }}</p>
+      <p class="minimum-increase">
+        Incremento mínimo: {{ formatPrice(publication.minimumIncrease) }}
+      </p>
+    </div>
+
+    @if (lastBid) {
+    <div class="last-bid-container">
+      <div class="bid-info">
+        <h4>Última puja realizada</h4>
+        <div class="bid-details">
+          <p class="amount">{{ formatPrice(lastBid.amount) }}</p>
+          <p class="bidder">
+            por <span class="bidder-name">{{ lastBid.bidderName }}</span>
+          </p>
+          <p class="time">{{ formatDate(lastBid.bidDate) }}</p>
+        </div>
+      </div>
+    </div>
+    } @else {
+    <p class="no-bids">No tiene pujas</p>
+    }
+
+    <div
+      style="
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        max-width: 200px;
+      "
+    >
+      <button
+        class="bid-button"
+        (click)="onPlaceBid()"
+        [disabled]="!canBid"
+        [class.disabled]="!canBid"
+        [title]="!canBid ? bidButtonMessage : ''"
+      >
+        {{ bidButtonMessage }}
+      </button>
+      <button class="model">Ver modelo 3D</button>
+    </div>
+
+    <div style="margin-top: 10px">
+      <div class="table-container">
+        <div class="table-row">
+          <div class="table-cell">Certificado SENASA</div>
+          <div class="table-cell" style="padding-left: 50px">
+            : {{ publication.senasaCertificate }}
+          </div>
+        </div>
+        <div class="table-row">
+          <div class="table-cell">Género</div>
+          <div class="table-cell" style="padding-left: 50px">
+            : {{ publication.gender }}
+          </div>
+        </div>
+        <div class="table-row">
+          <div class="table-cell">Peso</div>
+          <div class="table-cell" style="padding-left: 50px">
+            : {{ publication.weight }} kg
+          </div>
+        </div>
+        <div class="table-row">
+          <div class="table-cell">Especie</div>
+          <div class="table-cell" style="padding-left: 50px">
+            : {{ publication.specie }}
+          </div>
+        </div>
+        <div class="table-row">
+          <div class="table-cell">Raza</div>
+          <div class="table-cell" style="padding-left: 50px">
+            : {{ publication.race }}
+          </div>
+        </div>
+        <div class="table-row" style="display: none">
+          <div class="table-cell">Provincia</div>
+          <div class="table-cell" style="padding-left: 50px">
+            : {{ publication.direction.province }}
+          </div>
+        </div>
+        <div class="table-row" style="display: none">
+          <div class="table-cell">Fecha de publicación</div>
+          <div class="table-cell" style="padding-left: 50px">
+            : {{ publication.creationDate | date : "dd/MM/yyyy" }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal to display 3D model viewer -->
+<div *ngIf="showModelViewer" class="modal" (click)="closeModelViewerModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <app-animal-stage-viewer [modelPath]="modelPath"></app-animal-stage-viewer>
+    <button class="close-modal" (click)="closeModelViewerModal()">
+      Cerrar
+    </button>
+  </div>
+</div>

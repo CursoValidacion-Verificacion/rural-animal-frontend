@@ -1,0 +1,51 @@
+<div class="users-cont">
+  <div class="row p-4">
+  <div class="col-12">
+    <div class="d-flex justify-content-between align-items-center" *ngIf="!showTable">
+      <button
+        *ngIf="!showSignUp"
+        (click)="toggleSignUp()"
+        type="button"
+        id="nuevo-registro"
+        class="btn"
+      >
+        <i class="fas fa-plus"></i> Nuevo registro
+      </button>
+    </div>
+  </div>
+  <div class="col-12"  *ngIf="!showSignUp">
+    <app-user-list  
+    (callModalAction)="callEdition($event)"
+    (keyword)="setKeyword($event)"
+    [users]="userService.users$()"
+  />
+    @if(userService.users$().length) {
+    <app-pagination 
+    [service]="userService" 
+    [customCall]="true"
+    (callCustomPaginationMethod)="filterUsers()"
+    /> }
+  </div>
+  </div>
+
+  <app-signup 
+  *ngIf="showSignUp"
+  [logInButton]="false"
+  [BackUsersButton]="false" 
+  />
+</div>
+
+
+<ng-template #addUsersModal>
+  <app-modal [hideFooter]="true">
+    <div>
+      <app-user-form
+        [userForm]="userForm"
+        (callUpdateMethod)="updateUser($event)"
+      />
+    </div>
+  </app-modal>
+</ng-template>
+
+
+

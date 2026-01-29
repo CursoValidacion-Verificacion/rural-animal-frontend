@@ -1,0 +1,128 @@
+<div class="filter-item" *ngIf="showTable">
+  <label class="label-inline">Buscar:</label>
+  <div class="search-container">
+    <input
+      type="text"
+      placeholder="Buscar"
+      class="search-input"
+      (input)="applyFilter($event)"
+    />
+    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+  </div>
+</div>
+
+<div *ngIf="showTable" class="table-container table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Primer Apellido</th>
+        <th style="display: none" scope="col">Segundo Apellido</th>
+        <th scope="col">Correo Electrónico</th>
+        <th scope="col">Identificación</th>
+        <th scope="col">VCO</th>
+        <th scope="col">Fecha de Nacimiento</th>
+        <th scope="col">Teléfono</th>
+        <th style="display: none" scope="col">Estado</th>
+        <th style="display: none" scope="col">Provincia</th>
+        <th style="display: none" scope="col">Cantón</th>
+        <th style="display: none" scope="col">Distrito</th>
+        <th style="display: none" scope="col">Otras Señas</th>
+        <th scope="col">Rol</th>
+        <th class="text-center" scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (user of filteredUsers; track user.id) {
+      <tr>
+        <th scope="row">{{ user.id }}</th>
+        <td>{{ user.name }}</td>
+        <td>{{ user.lastName1 }}</td>
+        <td style="display: none">{{ user.lastName2 }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.identification }}</td>
+        <td>{{ user.vco }}</td>
+        <td>{{ user.birthDate | date : "dd/MM/yyyy" }}</td>
+        <td>{{ user.phoneNumber }}</td>
+        <td style="display: none">{{ user.state }}</td>
+        <td style="display: none">{{ user.direction?.province }}</td>
+        <td style="display: none">{{ user.direction?.canton }}</td>
+        <td style="display: none">{{ user.direction?.district }}</td>
+        <td style="display: none">{{ user.direction?.otherDetails }}</td>
+        <td>{{ user.role?.title }}</td>
+        <td>
+          <div class="actions">
+            <button (click)="editUser(user)" class="btn-edit" type="button">
+              <i class="fa-solid fa-pencil"></i>
+            </button>
+
+            <button
+              class="btn-delete"
+              type="button"
+              class="btn btn-danger btn-block"
+              (click)="modalService.displayModal('md', deleteConfirmationModal)"
+            >
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+
+            <!-- Modal de confirmación de eliminación -->
+            <ng-template #deleteConfirmationModal>
+              <app-modal [hideFooter]="true">
+                <h1>
+                  ¿Realmente desea eliminar al usuario {{ user?.name }}
+                  {{ user?.lastName1 }}, {{ user?.email }}?
+                </h1>
+                <div class="modal-footer">
+                  <button id="crear" 
+                  (click)="confirmDelete(user)"
+                  (click)="modalService.closeAll()"
+                  >Confirmar</button>
+                  <button id="cancelar" 
+                  (click)="modalService.closeAll()">Cancelar</button>
+                </div>
+              </app-modal>
+            </ng-template>
+            
+            <!-- Edición del estado del usuario -->
+            <button
+              (click)="toggleUserState(user)"
+              class="btn activebtn"
+              type="button"
+            >
+              <i
+                class="fa"
+                [ngClass]="
+                  user.state === 'Active' ? 'fa-toggle-on' : 'fa-toggle-off'
+                "
+              ></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      } @empty {
+      <tr *ngIf="filteredUsers.length === 0">
+        <td colspan="16">
+          <div class="d-flex justify-content-center align-items-center w-100">
+            <p class="mb-0">No hay usuarios registrados en el sistema.</p>
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<app-profile
+  *ngIf="!showTable"
+  [userToEdit]="selectedUser"
+  (cancelEdit)="cancelEdit()"
+></app-profile>
+<div *ngIf="!showTable" style="position: absolute; bottom: 80px; right: 100px">
+  <button (click)="cancelEdit()" type="button" class="back-button">
+    Regresar
+    <span style="padding-left: 10px">
+      <i class="fa-solid fa-arrow-left fa-lg" style="color: #000000"></i>
+    </span>
+  </button>
+</div>

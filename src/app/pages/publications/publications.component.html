@@ -1,0 +1,32 @@
+@defer {
+<div class="row p-4">
+    @if (!showForm) {
+    <div class="col-12">
+        <div>
+            <button (click)="callCreation()" type="button" id="nueva-publicacion" class="btn">
+        <i class="fas fa-plus"></i> Nueva publicación
+      </button>
+            <app-publications-list (filter)="setFilters($event)" [publications]="publicationService.publications$()" (callDeleteAction)="deletePublication($event)" (callEditionAction)="editPublication($event)" /> @if(publicationService.publications$().length) {
+            <app-pagination [service]="publicationService"
+                            [customCall]="true"
+                            (callCustomPaginationMethod)="filterPublication()" /> }
+        </div>
+    </div>
+    }
+</div>
+} @loading (minimum 1.5s){
+<app-loader></app-loader>
+}@if (showForm) {
+<div style="position: relative; min-height: 200px">
+    <!-- Ensure the container has some height -->
+    <app-publications-form [publicationForm]="publicationForm" [addressForm]="addressForm" (callSaveMethod)="savePublication($event)" (callUpdateMethod)="callEdition($event)" [changeButtonType]="changeButtonType"></app-publications-form>
+    <div style="position: absolute; bottom: -10px; right: 10px">
+        <button (click)="showPublicationForm()" type="button" class="back-button">
+      Regresar
+      <span style="padding-left: 10px">
+        <i class="fa-solid fa-arrow-left fa-lg" style="color: #000000"></i>
+      </span>
+    </button>
+    </div>
+</div>
+}

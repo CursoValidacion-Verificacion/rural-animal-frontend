@@ -1,0 +1,30 @@
+@defer {
+    <div class="row p-4">
+        @if (!showDetails) {
+            <div class="col-12">
+                <div>
+                    <app-bills-list [transactions]="transactionService.transactions$()" (callDetails)="setDetails($event)"/>
+                    @if (transactionService.transactions$().length) {
+                        <app-pagination [service]="transactionService"/>
+                    }
+                </div>
+            </div>
+        } @else {
+            <div class="col-12">
+                <div>
+                    <app-bills-details [billForm]="billForm" [transaction]="selectedTransaction!" (downloadedTransaction)="downloadTransaction($event)">
+                            <button (click)="showDetailsForm()" type="button" class="back-button">
+                                Regresar
+                                <span style="padding-left: 10px">
+                                <i class="fa-solid fa-arrow-left fa-lg" style="color: #000000"></i>
+                            </span>
+                            </button>
+                    </app-bills-details>
+
+                </div>
+            </div>
+        }
+    </div>
+} @loading (minimum 1.5s) {
+    <app-loader></app-loader>
+}

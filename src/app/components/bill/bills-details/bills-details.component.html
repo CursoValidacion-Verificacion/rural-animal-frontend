@@ -1,0 +1,73 @@
+<form [formGroup]="billForm" class="invoice-details-container">
+    <!-- Botón Descargar -->
+    <button id="download" class="btn-download" (click)="download()">Descargar</button>
+
+    <!-- Contenedor Principal -->
+    <div class="container">
+        <div class="row">
+            <!-- Columna Izquierda -->
+            <div class="col-xl-6 left-section">
+                <div class="mb-3">
+                    <label class="mb-1" for="billDate">Fecha:</label>
+                    <input
+                            id="billDate"
+                            formControlName="billDate"
+                            type="datetime-local"
+                            class="form-control"
+                    />
+                </div>
+                <div class="mb-3">
+                    <label class="mb-1" for="subTotal">Sub total:</label>
+                    <div class="input-wrapper">
+                        <span class="currency-symbol">₡</span>
+                        <input
+                                id="subTotal"
+                                formControlName="subTotal"
+                                type="text"
+                                class="form-control"
+                        />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="mb-1" for="IVA">IVA:</label>
+                    <div class="input-wrapper">
+                        <span class="currency-symbol">₡</span>
+                        <input
+                                id="IVA"
+                                formControlName="IVA"
+                                type="text"
+                                class="form-control"
+                        />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="mb-1" for="total">Total:</label>
+                    <div class="input-wrapper">
+                        <span class="currency-symbol">₡</span>
+                        <input
+                                id="total"
+                                formControlName="total"
+                                type="text"
+                                class="form-control"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna Derecha -->
+            <div class="col-xl-6 right-section">
+                <h3 class="list-title">Lista de publicaciones</h3>
+                <mat-list role="list" class="publications-list">
+                    @for (publication of transaction.publications; track publication.id) {
+                        <mat-list-item role="listitem">{{ publication.title }}</mat-list-item>
+                    }
+                </mat-list>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón Regresar -->
+    <div class="return">
+        <ng-content></ng-content>
+    </div>
+</form>

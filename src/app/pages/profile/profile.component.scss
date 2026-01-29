@@ -1,0 +1,150 @@
+// Variables de colores
+$primary-color: #77c040;
+$secondary-color: #333333;
+$third-color: #ffcb40;
+$text-white: #ffffff;
+$text-muted: #b5b9bd;
+$card-radius: 15px;
+$cool-color: #d3e97a;
+// Breakpoints
+$desktop: 1200px;
+$tablet: 768px;
+$mobile: 480px;
+// Main Profile Container
+.profile-main-container {
+  padding: 0 10%;
+  max-height: 100vh;
+  max-width: 100vh;
+  margin: 0;
+  background-color: white;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  @media (max-width: $desktop) {
+    padding: 0 8%;
+  }
+  @media (max-width: $tablet) {
+    padding: 0 5%;
+  }
+  @media (max-width: $mobile) {
+    padding: 0 2%;
+  }
+}
+
+.error {
+  color: red;
+  font-size: 0.875rem; 
+  margin-top: 0.5rem; 
+}
+
+.mat-typography {
+  overflow-y: hidden;
+  height: 50px;
+}
+
+// Info Container
+.info-container {
+  background-color: white;
+  padding-left: 20px;
+  padding-right: 20px;
+  // height: 550px;
+}
+
+// Column Styling
+.col-12,
+.col-md-6 {
+  background-color: white;
+  padding: 20px;
+  height: auto;
+  width: 100%;
+  @media (max-width: $desktop) {
+    padding: 18px;
+  }
+  @media (max-width: $tablet) {
+    padding: 15px;
+  }
+  @media (max-width: $mobile) {
+    padding: 10px;
+  }
+}
+
+// Title Styling
+.title {
+  font-size: 18px;
+  color: rgb(68, 76, 77);
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  @media (max-width: $desktop) {
+    font-size: 16px;
+  }
+  @media (max-width: $tablet) {
+    font-size: 14px;
+    text-align: center;
+  }
+  @media (max-width: $mobile) {
+    font-size: 12px;
+    text-align: center;
+  }
+  .btn-edit-user {
+    background-color: #77c040;
+    color: #ffffff;
+  }
+  .btn-cancel-edit {
+    background-color: #b5b9bd;
+    color: #ffffff;
+    margin-left: 5px;
+  }
+}
+
+// Shadow Styling
+.shadow-sm.bg-body.rounded {
+  background-color: white !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+// Go-Back Button Styling
+.go-back {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-end;
+  @media (max-width: $tablet) {
+    justify-content: center;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+
+#crear,
+#cancelar {
+  display: inline-block;
+  margin: 10px;
+  height: 35px;
+  width: 100px;
+  padding: 2px 8px;
+  border: none;
+  border-radius: 5px;
+  background-color: $primary-color;
+  color: $text-white;
+  font-size: 18px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#cancelar {
+  background-color: $text-white;
+  color: #dc2626;
+  border: 1px solid #dc2626;
+}
+
+#crear:hover {
+  background-color: $secondary-color;
+}
+
+#cancelar:hover {
+  background-color: #dc2626;
+  color: white;
+}

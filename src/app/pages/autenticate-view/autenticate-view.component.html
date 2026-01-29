@@ -1,0 +1,26 @@
+<div class="container">
+  <div style="margin-top: 120px">
+    <div class="contenedor">
+      <div *ngIf="isAuthenticated" class="success-message contenedor">
+        <h1>¡Felicidades!</h1>
+        <p>Correo verificado correctamente. ¡Gracias por confirmar tu cuenta!</p>
+      </div>
+      
+      <div *ngIf="!isAuthenticated && errorMessage" class="error-message contenedor">
+        <h1>Lo sentimos</h1>
+        <p>{{ errorMessage }}</p>
+      </div>
+
+      <div style="display: flex; align-items: start">
+        <div>
+          <img
+            id="image"
+            src="../../../assets/img/animals/cerdoHero.png"
+            alt="Cerdo de pie"
+          />
+        </div>
+      </div>
+      <div *ngIf="isAuthenticated"><a href="/login" class="btn-return ml-0">Iniciar sesión</a></div>
+    </div>
+  </div>
+</div>

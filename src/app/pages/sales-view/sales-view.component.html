@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="col-12">
+    <!-- Componente de lista de ventas -->
+    <app-sales-list
+      *ngIf="showList"
+      style="display: flex; justify-content: center"
+      [salesPublications]="publicationService.sales$()"
+      (viewDetails)="onViewDetails($event)"
+    ></app-sales-list>
+
+    <!-- Componente de detalles, mostrado solo cuando se selecciona una publicación -->
+    <app-sales-details
+      *ngIf="selectedPublication"
+      [publication]="selectedPublication!"
+      [isInCart]="isPublicationInCart(selectedPublication!)"
+      (addToCart)="addToCart($event)"
+      (goToCart)="navigateToCart()"
+    >
+    </app-sales-details>
+
+    <!-- Botón para cerrar detalles y volver a mostrar la lista -->
+
+    <div
+      style="
+        display: flex;
+        justify-content: end;
+        align-self: end;
+        margin-right: 100px;
+      "
+    >
+      <button
+        *ngIf="selectedPublication"
+        (click)="closeDetails()"
+        class="back-button"
+      >
+        Regresar
+        <span style="padding-left: 10px"
+          ><i class="fa-solid fa-arrow-left fa-lg" style="color: #000000"></i
+        ></span>
+      </button>
+    </div>
+
+    <!-- Componente de paginación, solo visible cuando showList es true -->
+    <app-pagination
+      *ngIf="showList"
+      [service]="publicationService"
+      [customCall]="true"
+      (callCustomPaginationMethod)="publicationService.getSalesPublications()"
+    />
+  </div>
+</div>

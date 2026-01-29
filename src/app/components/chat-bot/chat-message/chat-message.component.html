@@ -1,0 +1,22 @@
+<div class="message-row" [ngClass]="message.role">
+  <div class="avatar" [ngClass]="message.role === 'user' ? 'user-avatar' : 'assistant-avatar'">
+    @if (message.role === 'assistant') {
+    <i class="fas fa-robot"></i>
+    } @else {
+    <i class="fas fa-user"></i>
+    }
+  </div>
+
+  <div class="message-container">
+    @if (isLoading && message.role === 'assistant') {
+    <div class="typing-indicator">
+      <span class="spinner-border spinner-border-sm"></span>
+      Escribiendo...
+    </div>
+    } @else {
+    <div class="message-content">
+      {{ message.content }}
+    </div>
+    }
+  </div>
+</div>

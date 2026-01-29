@@ -1,0 +1,345 @@
+<form [formGroup]="publicationForm">
+  <div class="container">
+    <div class="row">
+      <div class="col-4">
+        <!--titulo-->
+        <label class="mb-1" for="title">
+          Título <span style="color: red">*</span>
+        </label>
+        <input
+          id="title"
+          formControlName="title"
+          type="text"
+          class="form-control"
+          placeholder="Ingresa el título"
+        />
+        @if (publicationForm.controls['title'].invalid &&
+        (publicationForm.controls['title'].dirty ||
+        publicationForm.controls['title'].touched)) {
+        <p class="text-danger my-1">El título es requerido</p>
+        }
+      </div>
+
+      <div class="col-4">
+        <!--Tipo-->
+        <label class="mb-1" for="type">
+          Tipo <span style="color: red">*</span>
+        </label>
+        <select
+          (change)="typeSelected()"
+          id="type"
+          formControlName="type"
+          class="form-control"
+        >
+          <option value="" disabled>--Selecciona un tipo--</option>
+          @for (type of types; track type.id) {
+          <option [value]="type.name">{{ type.name }}</option>
+          }
+        </select>
+        @if (publicationForm.controls['type'].invalid &&
+        (publicationForm.controls['type'].dirty ||
+        publicationForm.controls['type'].touched)) {
+        <p class="text-danger my-1">El tipo es requerido</p>
+        }
+      </div>
+
+      <div class="col-4">
+        <label class="mb-1" for="price">
+          Precio <span style="color: red">*</span>
+        </label>
+        <div style="position: relative">
+          <span
+            style="
+              position: absolute;
+              left: 10px;
+              top: 50%;
+              transform: translateY(-50%);
+              color: #888;
+            "
+            >₡</span
+          >
+          <input
+            id="price"
+            formControlName="price"
+            type="number"
+            class="form-control"
+            style="padding-left: 25px"
+            placeholder="Ingresa el precio"
+          />
+        </div>
+        @if (publicationForm.controls['price'].invalid &&
+        (publicationForm.controls['price'].dirty ||
+        publicationForm.controls['price'].touched)) {
+        <p class="text-danger my-1">
+          El precio es requerido y debe ser un valor positivo
+        </p>
+        }
+      </div>
+    </div>
+
+    <div class="col-12">
+      @if (selectedType == 'Subasta') {
+      <div class="row">
+        <div class="col-4">
+          <!--inicio-->
+          <label class="mb-1" for="startDate">Fecha de inicio</label>
+          <input
+            id="startDate"
+            formControlName="startDate"
+            [min]="minDateTime"
+            [max]="maxDate"
+            type="datetime-local"
+            class="form-control"
+          />
+        </div>
+
+        <div class="col-4">
+          <!--finalizacion-->
+          <label class="mb-1" for="endDate">Fecha de finalización</label>
+          <input
+            id="endDate"
+            formControlName="endDate"
+            [min]="minDateTime"
+            type="datetime-local"
+            class="form-control"
+          />
+        </div>
+
+        <div class="col-4">
+          <label class="mb-1" for="minimumIncrease">
+            Incremento mínimo <span style="color: red">*</span>
+          </label>
+          <div style="position: relative">
+            <span
+              style="
+                position: absolute;
+                left: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #888;
+              "
+              >₡</span
+            >
+            <input
+              id="minimumIncrease"
+              formControlName="minimumIncrease"
+              type="number"
+              class="form-control"
+              style="padding-left: 25px"
+              placeholder="Ingresa el incremento mínimo"
+            />
+          </div>
+          @if (publicationForm.controls['minimumIncrease'].invalid &&
+          (publicationForm.controls['minimumIncrease'].dirty ||
+          publicationForm.controls['minimumIncrease'].touched)) {
+          <p class="text-danger my-1">
+            El incremento mínimo es requerido y debe ser un valor positivo
+          </p>
+          }
+        </div>
+      </div>
+      }
+    </div>
+
+    <div class="row">
+      <div class="col-4">
+        <!--Genero-->
+        <label class="mb-1" for="gender">
+          Género <span style="color: red">*</span>
+        </label>
+        <select id="gender" formControlName="gender" class="form-control">
+          <option value="" disabled>--Selecciona el género--</option>
+          <option value="Macho">Macho</option>
+          <option value="Hembra">Hembra</option>
+        </select>
+        @if (publicationForm.controls['gender'].invalid &&
+        (publicationForm.controls['gender'].dirty ||
+        publicationForm.controls['gender'].touched)) {
+        <p class="text-danger my-1">El género es requerido</p>
+        }
+      </div>
+      <div class="col-4">
+        <!--Nacimiento:-->
+        <label class="mb-1" for="birthDate">
+          Fecha de nacimiento de animal <span style="color: red">*</span>
+        </label>
+
+        <input
+          id="birthDate"
+          formControlName="birthDate"
+          [max]="todayLimit"
+          [min]="minDate"
+          type="date"
+          class="form-control mb-1"
+        />
+        @if (publicationForm.controls['birthDate'].invalid &&
+        (publicationForm.controls['birthDate'].dirty ||
+        publicationForm.controls['birthDate'].touched)) {
+        <p class="text-danger my-1">La fecha de nacimiento es requerida</p>
+        }
+      </div>
+
+      <div class="col-4">
+        <!--Peso-->
+        <label class="mb-1" for="weight">
+          Peso <span style="color: red">*</span>
+        </label>
+        <div style="position: relative">
+          <input
+            id="weight"
+            formControlName="weight"
+            type="number"
+            class="form-control"
+            placeholder="Ingresa el peso"
+            style="padding-right: 30px"
+          />
+          <span
+            style="
+              position: absolute;
+              right: 10px;
+              top: 50%;
+              transform: translateY(-50%);
+              color: #888;
+            "
+            >Kg</span
+          >
+        </div>
+        @if (publicationForm.controls['weight'].invalid &&
+        (publicationForm.controls['weight'].dirty ||
+        publicationForm.controls['weight'].touched)) {
+        <p class="text-danger my-1">
+          El peso es requerido y debe ser un valor positivo
+        </p>
+        }
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-4">
+        <!--especie-->
+        <label class="mb-1" for="specie">
+          Especie <span style="color: red">*</span></label
+        >
+        <select
+          name="specie"
+          id="specie"
+          formControlName="specie"
+          class="form-control"
+          placeholder="--Seleccione una especie--"
+          (change)="onSpeciesChange()"
+        >
+          <option value="" disabled>--Seleccione una especie--</option>
+          @for (species of animalsData.species; track species) {
+          <option [value]="species.kind">
+            {{ species.kind }}
+          </option>
+          }
+        </select>
+        @if (publicationForm.controls['specie'].invalid &&
+        (publicationForm.controls['specie'].dirty ||
+        publicationForm.controls['specie'].touched)) {
+        <p class="text-danger my-1">La especie es requerida</p>
+        }
+      </div>
+
+      <div class="col-4">
+        <!--raza-->
+        <label class="mb-1" for="race">
+          Raza <span style="color: red">*</span>
+        </label>
+        <select
+          name="race"
+          id="race"
+          formControlName="race"
+          class="form-control"
+          placeholder="--Seleccione una raza--"
+        >
+          <option value="" disabled>--Seleccione una raza--</option>
+          @for (race of races; track race) {
+          <option [value]="race.name">{{ race.name }}</option>
+          }
+        </select>
+        @if (publicationForm.controls['race'].invalid &&
+        (publicationForm.controls['race'].dirty ||
+        publicationForm.controls['race'].touched)) {
+        <p class="text-danger my-1">La raza es requerida</p>
+        }
+      </div>
+
+      <div class="col-4">
+        <!--certificado-->
+        <label class="mb-1" for="senasaCertificate">
+          Certificado SENASA <span style="color: red">*</span>
+        </label>
+        <input
+          id="senasaCertificate"
+          formControlName="senasaCertificate"
+          type="text"
+          class="form-control"
+          placeholder="Ingresa el código de certificación"
+        />
+        @if (publicationForm.controls['senasaCertificate'].invalid &&
+        (publicationForm.controls['senasaCertificate'].dirty ||
+        publicationForm.controls['senasaCertificate'].touched)) {
+        <p class="text-danger my-1">El certificado SENASA es requerido</p>
+        }
+      </div>
+    </div>
+
+    <app-address
+      [addressForm]="addressForm"
+      [provinces]="provinces"
+      [cantons]="cantons"
+      [districts]="districts"
+      (provinceChange)="handleProvinceChange($event)"
+      (cantonChange)="handleCantonChange($event)"
+    >
+      <div class="col-4">
+        <form id="subir-foto">
+          <label (click)="openWidget()">
+            <i class="fa fa-camera"></i> Subir fotos:
+          </label>
+        </form>
+      </div>
+      <div class="col-4" id="correct-upload">
+        @if (cloudinaryResults.length == 1) {
+        <label for="photo-label"
+          >**{{ cloudinaryResults.length }} foto subida correctamente**</label
+        >
+        } @if (cloudinaryResults.length > 1) {
+        <label for="photo-label"
+          >**{{ cloudinaryResults.length }} fotos subidas correctamente**</label
+        >
+        }
+      </div>
+    </app-address>
+  </div>
+
+  <div class="d-flex justify-content-center">
+    @if (!changeButtonType) {
+    <button
+      (click)="callSave()"
+      [disabled]="publicationForm.invalid"
+      id="crear"
+      class="btn"
+      type="button"
+    >
+      Crear
+    </button>
+    } @else {
+    <button
+      (click)="callSave()"
+      [disabled]="publicationForm.invalid"
+      id="crear"
+      class="btn"
+      type="button"
+    >
+      Actualizar
+    </button>
+    }
+
+    <button (click)="resetForm()" id="cancelar" class="btn" type="button">
+      Cancelar
+    </button>
+  </div>
+</form>

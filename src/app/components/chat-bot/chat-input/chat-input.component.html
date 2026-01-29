@@ -1,0 +1,23 @@
+<div class="input-wrapper">
+  @if (connectionStatus !== 'connected') {
+  <div class="connection-warning">
+    <i class="fas fa-exclamation-circle"></i>
+    <span>Esperando conexión...</span>
+  </div>
+  }
+
+  <div class="input-group" [class.disabled]="connectionStatus !== 'connected'">
+    <input type="text" class="form-control"
+      [placeholder]="connectionStatus === 'connected' ? 'Escribe un mensaje acá' : 'Conectando...'"
+      [(ngModel)]="messageContent" (keyup.enter)="sendMessage()"
+      [disabled]="isLoading || connectionStatus !== 'connected'">
+    <button class="btn-send" (click)="sendMessage()"
+      [disabled]="isLoading || !messageContent.trim() || connectionStatus !== 'connected'">
+      @if (isLoading) {
+      <span class="spinner-border spinner-border-sm"></span>
+      } @else {
+      <img src="assets/icons/send.png" alt="send" class="send-icon">
+      }
+    </button>
+  </div>
+</div>

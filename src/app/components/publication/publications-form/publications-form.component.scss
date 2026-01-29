@@ -1,0 +1,133 @@
+// Variables de colores
+$primary-color: #77c040;
+$secondary-color: #333333;
+$third-color: #ffcb40;
+$text-white: #ffffff;
+$text-muted: #b5b9bd;
+$card-radius: 15px;
+$cool-color: #d3e97a;
+
+::ng-deep form {
+  .container {
+    margin: 0 auto;
+    max-width: 900px;
+    .row {
+      margin-bottom: 1.5rem;
+      .col-4 {
+        display: flex;
+        flex-direction: column;
+      }
+      label {
+        font-weight: 600;
+        color: #333;
+      }
+      input,
+      select {
+        background-color: #f0f5eb;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 8px;
+        font-size: 0.9rem;
+        color: #555;
+        &:focus {
+          outline: none;
+          border-color: #a3a3a3;
+          box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+      }
+      p.text-danger {
+        font-size: 0.8rem;
+        margin-top: 0.3rem;
+        color: #e74c3c;
+      }
+    }
+  }
+  h2 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+  h3 {
+    margin: 1.5rem 0 0.5rem;
+    color: #4a4a4a;
+    font-size: 1.2rem;
+  }
+}
+
+#crear,
+#cancelar {
+  display: inline-block;
+  margin: 10px;
+  height: 35px;
+  width: 100px;
+  padding: 2px 8px;
+  border: none;
+  border-radius: 5px;
+  background-color: $primary-color;
+  color: $text-white;
+  font-size: 18px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#cancelar {
+  background-color: $text-white;
+  color: #dc2626;
+  border: 1px solid #dc2626;
+}
+
+#crear:hover {
+  background-color: $secondary-color;
+}
+
+#cancelar:hover {
+  background-color: #dc2626;
+  color: white;
+}
+
+#subir-foto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0;
+  margin-top: 35px;
+}
+
+#subir-foto label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  color: $primary-color;
+}
+
+#subir-foto label i {
+  margin-right: 8px;
+  /* Espacio entre el ícono y el texto */
+  font-size: 1.5em;
+  /* Tamaño del ícono */
+}
+
+#subir-foto input[type="file"] {
+  display: none;
+}
+
+#subir-foto label:hover {
+  color: $secondary-color;
+  /* Color del texto al pasar el mouse */
+}
+
+#correct-upload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0;
+  margin-top: 35px;
+
+  
+}
+
+#correct-upload label{
+  font-weight: 300;
+}

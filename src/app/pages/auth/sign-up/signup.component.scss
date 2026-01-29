@@ -1,0 +1,371 @@
+// Variables de colores
+$primary-color: #77c040;
+$secondary-color: #333333;
+$third-color: #ffcb40;
+$text-white: #ffffff;
+$text-muted: #b5b9bd;
+$card-radius: 15px;
+$cool-color: #d3e97a;
+
+// Estilos generales y para pantallas grandes (desktop)
+.corner-home-btn {
+  position: absolute;
+  top: 1rem;
+  right: 3rem;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+
+  i {
+    font-size: 1.5rem;
+    color: #6e6f70;
+    transition: color 0.2s ease;
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+    i {
+      color: darken($primary-color, 10%);
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+::ng-deep form {
+  .container {
+    margin: 0 auto;
+    max-width: 900px;
+    .row {
+      margin-top: 0.2rem;
+      margin-bottom: 2rem;
+      .col-4 {
+        display: flex;
+        flex-direction: column;
+      }
+      label {
+        font-weight: 600;
+        color: #333;
+      }
+      input,
+      select {
+        background-color: #f0f5eb;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 8px;
+        font-size: 0.9rem;
+        color: #555;
+        &:focus {
+          outline: none;
+          border-color: #a3a3a3;
+          box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+      }
+      p.text-danger {
+        font-size: 0.85rem;
+        margin-top: 0.3rem;
+        color: #e74c3c;
+      }
+    }
+  }
+
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+
+  .tittle-text {
+    margin-top: 0;
+    margin-left: 85px;
+  }
+
+  .org {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: start;
+    margin-top: 10px;
+
+    .name-rural {
+      margin-left: 60px;
+      font-weight: 500;
+
+      span {
+        font-size: 45px;
+        line-height: 1.5;
+      }
+
+      .rural {
+        color: $primary-color;
+      }
+    }
+  }
+
+  h2 {
+    font-size: 25px;
+    margin-bottom: 0;
+  }
+
+  h3 {
+    font-size: 0.6rem;
+    margin-top: 0.3rem;
+    color: #e74c3c;
+  }
+
+  .form {
+    display: flex;
+    justify-content: center;
+    gap: 1.8rem;
+    width: 100%;
+    margin-bottom: -45px;
+
+    label.mb-1, label.mb-no {
+      font-weight: 600;
+      color: #333;
+
+      &:not(.no-asterisk)::after {
+        content: "*";
+        color: red;
+        margin-right: 5px;
+      }
+    }
+
+    input,
+    select {
+      background-color: #f0f5eb;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 8px;
+      font-size: 0.9rem;
+      color: #555;
+      width: 280px;
+      margin-bottom: 0px;
+
+      &:focus {
+        outline: none;
+        border-color: #a3a3a3;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+
+  .position-relative{
+    height: 90px;
+  }
+
+  .text-danger.my-1 {
+    margin: 0 !important;   
+    padding: 0 !important;  
+  }
+
+  a {
+    text-decoration: none;
+    color: $text-white;
+    margin-right: 300px;
+  }
+
+  .login-container {
+    height: 30vh;
+
+    h1 {
+      font-weight: bold;
+    }
+
+    .title {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      .button-container {
+        margin-left: auto;
+      }
+    }
+
+    .invalid-feedback {
+      position: absolute;
+      margin-top: 0;
+    }
+  }
+
+  #crear,
+  #cancelar {
+    display: inline-block;
+    margin: 10px;
+    height: 35px;
+    width: 100px;
+    padding: 2px 8px;
+    border: none;
+    border-radius: 5px;
+    background-color: $primary-color;
+    color: $text-white;
+    font-size: 18px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: $secondary-color;
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  #cancelar {
+    background-color: $text-white;
+    color: #dc2626;
+    border: 1px solid #dc2626;
+
+    &:hover {
+      background-color: #dc2626;
+      color: white;
+    }
+  }
+
+  .corner-register-btn {
+    position: absolute;
+    top: 60px;
+    right: 6rem;
+    padding: 0.75rem 1.5rem;
+    background-color: $third-color;
+    color: white;
+    border: none;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 8;
+    font-size: 0.875rem;
+
+    &:hover {
+      background-color: $secondary-color;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+  .direction-div{
+  margin-top: 40px;
+  }
+
+  app-address {
+    label[for="role"] {
+      &::after {
+        content: '*';
+        color: red;
+      }
+    }
+  }
+}
+.back-button {
+  padding: 10px 20px;
+  background-color: $text-white;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 16px;
+  color: $secondary-color;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s, border-color 0.3s;
+  &:hover {
+    background-color: $secondary-color;
+    // border-color: #999;
+    color: $text-white;
+  }
+  position: fixed;
+  bottom: 20px;  
+  right: 100px; 
+  .arrow-left {
+    margin-left: 8px;
+    font-size: 16px;
+  }
+}
+
+
+// Estilos para pantallas medianas (tablets)
+@media (max-width: 1024px) {
+  .corner-home-btn {
+    top: 1rem;
+    right: 2rem;
+  }
+
+  form .tittle-text {
+    margin-left: 40px;
+  }
+
+  .org .name-rural span {
+    font-size: 35px;
+  }
+
+  .corner-register-btn {
+    top: 50px;
+    right: 4rem;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.8rem;
+  }
+}
+
+
+// Estilos para pantallas pequeñas (celulares)
+@media (max-width: 768px) {
+  .corner-home-btn {
+    top: 1rem;
+    right: 1rem;
+
+    i {
+      font-size: 1.2rem;
+    }
+  }
+
+  form {
+    padding: 10px;
+
+    .tittle-text {
+      margin-left: 20px;
+    }
+
+    .org {
+      flex-direction: column;
+      align-items: center;
+
+      .name-rural {
+        margin-left: 0;
+        text-align: center;
+
+        span {
+          font-size: 28px;
+        }
+      }
+    }
+
+    h2 {
+      font-size: 20px;
+    }
+
+    .form {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    input,
+    select {
+      width: 100%;
+    }
+
+    .corner-register-btn {
+      top: 45px;
+      right: 2rem;
+      padding: 0.4rem 1rem;
+      font-size: 0.75rem;
+    }
+  }
+}

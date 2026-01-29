@@ -1,0 +1,364 @@
+<form [formGroup]="userForm" class="row" (ngSubmit)="callSave()">
+  <div>
+    <button
+      *ngIf="BackUsersButton"
+      type="button"
+      (click)="onHome()"
+      class="corner-home-btn"
+      routerLink="/"
+      aria-label="Ir a la página principal"
+    >
+      <i class="fas fa-home"></i>
+    </button>
+  </div>
+
+  <div class="title-text" *ngIf="BackUsersButton">
+    <div class="org">
+      <div class="name-rural">
+        <span class="rural">Rural </span>
+        <span class="animal"> Animal</span>
+      </div>
+      <div *ngIf="logInButton">
+        <a href="/login">
+          <button
+            class="corner-register-btn"
+            type="button"
+            style="font-size: 18px"
+          >
+            Iniciar sesión
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="BackUsersButton" style="padding-left: 75px">
+    <h2>Crea tu usuario</h2>
+    <h3>* Campo obligatorio</h3>
+  </div>
+
+  <div class="form">
+    <div class="primera-columna">
+      <!-- Nombre -->
+      <div class="mb-2 position-relative">
+        <label class="mb-1" for="name">Nombre</label>
+        <input
+          id="name"
+          formControlName="name"
+          type="text"
+          class="form-control"
+          placeholder="Ingresa tu nombre"
+        />
+        <div
+          *ngIf="
+            userForm.controls['name'].invalid &&
+            (userForm.controls['name'].dirty ||
+              userForm.controls['name'].touched)
+          "
+        >
+          <p class="text-danger my-1">Este campo es obligatorio</p>
+        </div>
+      </div>
+
+      <!-- Número de cédula -->
+      <div class="mb-2 position-relative">
+        <label class="mb-1" for="identification">Número de cédula</label>
+        <input
+          id="identification"
+          formControlName="identification"
+          type="text"
+          class="form-control"
+          placeholder="Ingresa tu número de cédula"
+        />
+        <!-- Validación para el formato incorrecto de la cédula -->
+        <div
+          *ngIf="
+            userForm.controls['identification'].hasError('cedulaInvalida') &&
+            (userForm.controls['identification'].dirty || userForm.controls['identification'].touched)
+          "
+        >
+          <p class="text-danger my-1">La cédula debe tener 9 dígitos sin guiones</p>
+        </div>
+        <!-- Validación para el campo obligatorio -->
+        <div
+          *ngIf="
+            userForm.controls['identification'].hasError('required') &&
+            (userForm.controls['identification'].dirty || userForm.controls['identification'].touched)
+          "
+        >
+          <p class="text-danger my-1">Este campo es obligatorio</p>
+        </div>
+      </div>
+
+      <!-- Correo electrónico -->
+      <div class="mb-2 position-relative">
+        <label class="mb-1" for="email">Correo electrónico</label>
+        <input
+          id="email"
+          formControlName="email"
+          type="email"
+          class="form-control"
+          placeholder="Ingresa tu correo electrónico"
+          (change)="onEmailChange($event)"
+        />
+        <div
+          *ngIf="userForm.controls['email'].errors?.['email'] && (userForm.controls['email'].dirty || userForm.controls['email'].touched)"
+        >
+          <p class="text-danger my-1">
+            El correo no tiene un formato válido
+          </p>
+        </div>
+        <div
+          *ngIf="
+            userForm.controls['email'].invalid &&
+            (userForm.controls['email'].dirty ||
+              userForm.controls['email'].touched)
+          "
+        >
+          <p class="text-danger my-1">Este campo es obligatorio</p>
+        </div>
+      </div>
+    </div>
+    <div class="segunda-columna">
+      <!-- Primer apellido -->
+      <div class="mb-2 position-relative">
+        <label class="mb-1" for="lastName1">Primer apellido</label>
+        <input
+          id="lastName1"
+          formControlName="lastName1"
+          type="text"
+          class="form-control"
+          placeholder="Ingresa tu primer apellido"
+        />
+        <div
+          *ngIf="
+            userForm.controls['lastName1'].invalid &&
+            (userForm.controls['lastName1'].dirty ||
+              userForm.controls['lastName1'].touched)
+          "
+        >
+          <p class="text-danger my-1">Este campo es obligatorio</p>
+        </div>
+      </div>
+      <!-- Fecha de nacimiento -->
+      <div class="mb-2 position-relative">
+        <label class="mb-1" for="birthDate">Fecha de nacimiento</label>
+        <input
+          id="birthDate"
+          formControlName="birthDate"
+          type="date"
+          class="form-control"
+        />
+        <div
+          *ngIf="
+            userForm.controls['birthDate'].hasError('age') &&
+            userForm.controls['birthDate'].touched
+          "
+        >
+          <p class="text-danger my-1">Debe tener al menos 18 años.</p>
+        </div>
+        <div
+        *ngIf="
+          userForm.controls['birthDate'].hasError('ageTooOld') &&
+          userForm.controls['birthDate'].touched
+        "
+        >
+          <p class="text-danger my-1">No debe tener más de 99 años.</p>
+        </div>
+        <div
+          *ngIf="
+            userForm.controls['birthDate'].hasError('required') &&
+            userForm.controls['birthDate'].touched
+          "
+        >
+          <p class="text-danger my-1">Este campo es obligatorio.</p>
+        </div>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="mb-2 position-relative">
+        <label class="mb-1" for="password">Contraseña</label>
+        <input
+          id="password"
+          formControlName="password"
+          [type]="passwordVisible ? 'text' : 'password'"
+          class="form-control"
+          placeholder="Ingresa tu contraseña"
+        />
+        <i
+          class="fa fa-eye position-absolute"
+          [ngClass]="{
+            'fa-eye-slash': passwordVisible,
+            'fa-eye': !passwordVisible
+          }"
+          style="cursor: pointer; top: 35px; right: 10px"
+          (click)="togglePasswordVisibility()"
+        ></i>
+        <div
+          *ngIf="
+            userForm.controls['password'].invalid &&
+            (userForm.controls['password'].dirty ||
+              userForm.controls['password'].touched)
+          "
+        >
+          <p class="text-danger my-1">Este campo es obligatorio</p>
+        </div>
+      </div>
+    </div>
+    <div class="tercera-columna">
+      <!-- Segundo apellido -->
+      <div class="mb-2 position-relative">
+        <label class="mb-1 no-asterisk" for="lastName2">Segundo apellido</label>
+        <input
+          id="lastName2"
+          formControlName="lastName2"
+          type="text"
+          class="form-control"
+          placeholder="Ingresa tu segundo apellido"
+        />
+      </div>
+
+      <!-- Número de teléfono -->
+      <div class="mb-2 position-relative">
+        <label class="mb-1" for="phoneNumber">Número de teléfono</label>
+        <input
+          id="phoneNumber"
+          formControlName="phoneNumber"
+          type="text"
+          class="form-control"
+          placeholder="Ingresa tu número de teléfono"
+        />
+        <div
+        *ngIf="
+          userForm.controls['phoneNumber'].hasError('invalidPhoneNumber') &&
+          (userForm.controls['phoneNumber'].dirty || userForm.controls['phoneNumber'].touched)
+        "
+        >
+          <p class="text-danger my-1">Tomar en cuenta formato tico, sin guiones</p>
+        </div>
+        <div
+          *ngIf="
+            userForm.controls['phoneNumber'].invalid &&
+            (userForm.controls['phoneNumber'].dirty ||
+              userForm.controls['phoneNumber'].touched)
+          "
+        >
+          <p class="text-danger my-1">Este campo es obligatorio</p>
+        </div>
+      </div>
+
+      <!-- Confirmar contraseña -->
+      <div class="mb-2 position-relative">
+        <label class="mb-1" for="confirmPassword">Confirmar contraseña</label>
+        <input
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          [type]="confirmPasswordVisible ? 'text' : 'password'"
+          class="form-control"
+          placeholder="Por favor confirma tu contraseña"
+        />
+        <i
+          class="fa fa-eye position-absolute"
+          [ngClass]="{
+            'fa-eye-slash': confirmPasswordVisible,
+            'fa-eye': !confirmPasswordVisible
+          }"
+          style="cursor: pointer; top: 35px; right: 10px"
+          (click)="toggleConfirmPasswordVisibility()"
+        ></i>
+        <div
+          *ngIf="
+            userForm.controls['confirmPassword'].invalid &&
+            (userForm.controls['confirmPassword'].dirty ||
+              userForm.controls['confirmPassword'].touched)
+          "
+        >
+          <p class="text-danger my-1">Este campo es obligatorio</p>
+        </div>
+        <div
+          *ngIf="
+            userForm.controls['confirmPassword'].value !==
+            userForm.controls['password'].value
+          "
+        >
+          <p class="text-danger my-1">Las contraseñas no coinciden</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="direction-div">
+    <!-- Dirección -->
+    <app-address
+      [addressForm]="addressForm"
+      [provinces]="provinces"
+      
+      [cantons]="cantons"
+      [districts]="districts"
+      (provinceChange)="handleProvinceChange($event)"
+      (cantonChange)="handleCantonChange($event)"
+    >
+      <div class="col-4">
+        <div class="mb-2 position-relative">
+          <label class="mb-1" for="role">Rol</label>
+          <select id="role" formControlName="role" class="form-control">
+            <option value="" disabled selected>--Selecciona tu rol--</option>
+            <option value="BUYER">Comprador</option>
+            <option value="SELLER">Vendedor</option>
+          </select>
+          <div
+            *ngIf="
+              userForm.controls['role'].invalid &&
+              (userForm.controls['role'].dirty ||
+                userForm.controls['role'].touched)
+            "
+          >
+            <p class="text-danger my-1">Este campo es obligatorio</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-4">
+        <!-- Certificado SENASA para vendedor -->
+        <div class="mb-2 position-relative" *ngIf="userForm.controls['role'].value === 'SELLER'">
+          <label class="mb-1" for="vco">Certificado SENASA</label>
+          <input
+            id="vco"
+            formControlName="vco"
+            type="text"
+            class="form-control"
+            placeholder="Ingresa tu número de CVO"
+          />
+        </div>
+      </div>
+    </app-address>
+  </div>
+
+
+  <div class="d-flex justify-content-center">
+    <button 
+      id="crear"
+      (click)="callSave()"
+      class="registrar"
+      type="button"
+      >
+      Registrar
+    </button>
+    <button
+      *ngIf="BackUsersButton"
+      id="cancelar"
+      (click)="onCancelSign()"
+      class="btn btn-secondary ms-2"
+      type="button"
+    >
+      Cancelar
+    </button>
+    <button 
+      *ngIf="!BackUsersButton"
+      id="cancelar" 
+      type="button" 
+      class="btn btn-secondary ms-2" 
+      (click)="onCancelUsers()">
+      Cancelar
+    </button>
+  </div>
+</form>

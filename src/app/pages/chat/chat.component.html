@@ -1,0 +1,28 @@
+<!-- Indicador de estado de conexión -->
+<div class="connection-status" [ngClass]="connectionStatus()">
+    @switch (connectionStatus()) {
+    @case ('connected') {
+    <i class="fas fa-circle status-icon"></i>
+    <span>Conectado</span>
+    }
+    @case ('disconnected') {
+    <i class="fas fa-circle status-icon"></i>
+    <span>Desconectado - Reconectando...</span>
+    }
+    @case ('error') {
+    <i class="fas fa-exclamation-triangle status-icon"></i>
+    <span>Error de conexión - Reconectando...</span>
+    }
+    }
+</div>
+
+<div class="chat-container">
+    @for (message of messages(); track message.timestamp; let last = $last) {
+    <app-chat-message [message]="message" [isLoading]="isLoading() && last && message.role === 'assistant'" />
+    }
+</div>
+
+<div class="mt-3">
+    <app-chat-input [isLoading]="isLoading() || !isConnected()" [connectionStatus]="connectionStatus()"
+        (onSendMessage)="handleSendMessage($event)" />
+</div>

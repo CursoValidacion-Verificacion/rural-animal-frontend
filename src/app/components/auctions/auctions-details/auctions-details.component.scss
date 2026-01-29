@@ -1,0 +1,311 @@
+// Variables de colores
+$primary-color: #77c040;
+$secondary-color: #333333;
+$third-color: #ffcb40;
+$text-white: #ffffff;
+$text-muted: #b5b9bd;
+$card-radius: 15px;
+$cool-color: #d3e97a;
+img {
+  border-radius: 10px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  // margin-bottom: 10px;
+}
+
+.price {
+  font-size: 16px;
+  color: $text-muted;
+  margin-top: 10px;
+  // margin-bottom: 20px;
+}
+
+.auction-time {
+  display: inline-block;
+  height: 35px;
+  width: 280px;
+  padding: 2px 8px;
+  border: none;
+  border-radius: 5px;
+  background-color: $primary-color;
+  color: white;
+  font-size: 18px;
+  font-weight: 400;
+  transition: all 0.3s ease;
+  .timer {
+    margin: 0;
+    padding: 5px 0;
+    text-align: center;
+    font-size: 1.2rem;
+    color: white;
+  }
+  &.ending-soon {
+    background-color: red;
+    animation: pulse 1s infinite;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.comprar-button {
+  display: inline-block;
+  height: 35px;
+  width: 130px;
+  padding: 2px 8px;
+  border: none;
+  border-radius: 5px;
+  background-color: $primary-color;
+  color: $text-white;
+  font-size: 18px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.comprar-button:hover {
+  background-color: $secondary-color;
+}
+
+.model {
+  margin-top: 10px;
+  display: inline-block;
+  height: 25px;
+  width: 100px;
+  padding: 2px 8px;
+  border: none;
+  border-radius: 5px;
+  background-color: $third-color;
+  color: $text-white;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.model:hover {
+  background-color: $secondary-color;
+}
+
+.table-container {
+  display: table;
+  border-collapse: collapse;
+  color: $secondary-color;
+}
+
+.table-row {
+  display: table-row;
+}
+
+.table-cell {
+  display: table-cell;
+  padding: 8px;
+  border-top: 1px solid $text-muted;
+  border-left: 1px solid $text-white;
+}
+
+.table-cell:last-child {
+  border-right: 1px solid $text-white;
+}
+
+.table-row:last-child .table-cell {
+  border-bottom: 1px solid $text-white;
+}
+
+.carousel-container {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.carousel-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.carousel-button.left {
+  left: 10px;
+}
+
+.carousel-button.right {
+  right: 10px;
+}
+
+.carousel-button:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Modal overlay */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal content */
+
+.modal-content {
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 800px;
+}
+
+/* Close button */
+
+.close-modal {
+  background-color: $text-white;
+  color: #f44336;
+  padding: 10px;
+  border: 1px solid #f44336;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  float: right;
+  width: 100px;
+  font-size: 16px;
+}
+
+.close-modal:hover {
+  background-color: #d32f2f;
+  color: $text-white;
+}
+
+//nuevo
+.bid-button {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  background-color: $primary-color;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 0.3s ease;
+  &:hover:not(.disabled) {
+    background-color: $cool-color;
+  }
+  &.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #6c757d;
+  }
+}
+
+.highest-bid {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: rgba($primary-color, 0.1);
+  border-radius: 5px;
+  .highest-bid-info {
+    margin: 0;
+    font-size: 16px;
+    color: $secondary-color;
+    .highest-bidder {
+      font-weight: 600;
+      margin-left: 5px;
+    }
+  }
+}
+
+.last-bid-container {
+  background-color: #f8f9fa;
+  height: 105px;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  padding-top: 0px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  .bid-info {
+    h4 {
+      color: $secondary-color;
+      font-size: 18px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .bid-details {
+      .amount {
+        font-size: 24px;
+        color: $primary-color;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .bidder {
+        font-size: 16px;
+        color: $secondary-color;
+        margin-bottom: 5px;
+        .bidder-name {
+          font-weight: 600;
+          color: $secondary-color;
+        }
+      }
+      .time {
+        font-size: 14px;
+        color: $text-muted;
+      }
+    }
+  }
+}
+
+.no-bids {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  color: $text-muted;
+  font-style: italic;
+  text-align: center;
+  margin: 20px 0;
+}

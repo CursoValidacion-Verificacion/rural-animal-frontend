@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="col-12">
+    <!-- Componente de lista de subastas -->
+    <app-auctions-list
+      *ngIf="showList"
+      style="display: flex; justify-content: center"
+      [auctionsPublications]="publicationService.auctions$()"
+      (viewDetails)="onViewDetails($event)"
+    ></app-auctions-list>
+
+    <!-- Componente de detalles, mostrado solo cuando se selecciona una publicación -->
+    <app-auction-details
+      *ngIf="selectedPublication"
+      [publication]="selectedPublication"
+      [currentBidAmount]="currentBidAmount"
+      [timeRemaining]="timeRemaining"
+      [isEndingSoon]="isEndingSoon"
+      [auctionEnded]="auctionEnded"
+      (placeBidEvent)="onPlaceBid($event)"
+      [lastBid]="lastBid"
+    >
+    </app-auction-details>
+
+    <!-- Botón para cerrar detalles y volver a mostrar la lista -->
+    <div
+      style="
+        display: flex;
+        justify-content: end;
+        align-items: start;
+        margin-right: 100px;
+      "
+    >
+      <button
+        *ngIf="selectedPublication"
+        (click)="closeDetails()"
+        class="back-button"
+      >
+        Regresar
+        <span style="padding-left: 10px"
+          ><i class="fa-solid fa-arrow-left fa-lg" style="color: #000000"></i
+        ></span>
+      </button>
+    </div>
+
+    <!-- Componente de paginación, solo visible cuando showList es true -->
+    <app-pagination
+      *ngIf="showList"
+      [service]="publicationService"
+      [customCall]="true"
+      (callCustomPaginationMethod)="
+        publicationService.getAuctionsPublications()
+      "
+    />
+  </div>
+</div>

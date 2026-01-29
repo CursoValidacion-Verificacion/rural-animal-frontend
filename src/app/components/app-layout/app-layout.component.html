@@ -1,0 +1,22 @@
+<div class="ltr">
+  <div class="page-wrapper compact-wrapper">
+    <app-topbar></app-topbar>
+
+    <div class="page-body-wrapper">
+      <div
+        class="sidebar-wrapper"
+        sidebar-layout="default-sidebar"
+        icon="stroke-svg"
+        [ngClass]="{ close_icon: !layoutService.sidebarOpen }"
+      >
+        <app-sidebar></app-sidebar>
+      </div>
+
+      <div class="page-body" style="background-color: white">
+        <main class="container-fluid">
+          <router-outlet></router-outlet>
+        </main>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,111 @@
+{
+  "species": [
+    {
+      "kind": "Bovino",
+      "races": [
+        { "name": "Brahman" },
+        { "name": "Gyr" },
+        { "name": "Jersey" },
+        { "name": "Holstein" },
+        { "name": "Simmental" },
+        { "name": "Angus" }
+      ]
+    },
+    {
+      "kind": "Porcino",
+      "races": [
+        { "name": "Yorkshire" },
+        { "name": "Landrace" },
+        { "name": "Duroc" },
+        { "name": "Pietrain" },
+        { "name": "Berkshire" }
+      ]
+    },
+    {
+      "kind": "Ovino",
+      "races": [
+        { "name": "Pelibuey" },
+        { "name": "Dorper" },
+        { "name": "Suffolk" },
+        { "name": "Merino" }
+      ]
+    },
+    {
+      "kind": "Caprino",
+      "races": [
+        { "name": "Saanen" },
+        { "name": "Alpina" },
+        { "name": "Nubian" },
+        { "name": "Boer" }
+      ]
+    },
+    {
+      "kind": "Gallina",
+      "races": [
+        { "name": "Rhode Island Red" },
+        { "name": "Leghorn" },
+        { "name": "Plymouth Rock" },
+        { "name": "Sussex" }
+      ]
+    },
+    {
+      "kind": "Pavo",
+      "races": [{ "name": "Bronceado" }, { "name": "Pavo Blanco" }]
+    },
+    {
+      "kind": "Pato",
+      "races": [
+        { "name": "Pato Pekín" },
+        { "name": "Pato Muscovy" },
+        { "name": "Pato Khaki Campbell" }
+      ]
+    },
+    {
+      "kind": "Pollo de Engorde",
+      "races": [
+        { "name": "Cobb 500" },
+        { "name": "Ross 308" },
+        { "name": "Hubbard Flex" },
+        { "name": "Arbor Acres" }
+      ]
+    },
+    {
+      "kind": "Equino",
+      "races": [
+        { "name": "Criollo Costarricense" },
+        { "name": "Paso Fino" },
+        { "name": "Percherón" },
+        { "name": "Pura Raza Española" }
+      ]
+    },
+    {
+      "kind": "Asno",
+      "races": [{ "name": "Burro Criollo" }, { "name": "Muleño" }]
+    },
+    {
+      "kind": "Conejo",
+      "races": [
+        { "name": "Nueva Zelanda" },
+        { "name": "California" },
+        { "name": "Flemish Giant" },
+        { "name": "Rex" }
+      ]
+    },
+    {
+      "kind": "Apicultura",
+      "races": [
+        { "name": "Abeja Europea" },
+        { "name": "Abeja Africana" },
+        { "name": "Abeja Itálica" }
+      ]
+    },
+    {
+      "kind": "Bubalino",
+      "races": [{ "name": "Búfalo de Agua" }, { "name": "Búfalo Mediterráneo" }]
+    },
+    {
+      "kind": "Criollo",
+      "races": [{ "name": "Criollo" }]
+    }
+  ]
+}

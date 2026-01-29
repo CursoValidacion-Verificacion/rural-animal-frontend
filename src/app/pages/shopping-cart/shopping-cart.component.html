@@ -1,0 +1,73 @@
+<div class="cart-container bg-gradient">
+  <header class="cart-header">
+    <h2>
+      <i class="fas fa-paw"></i> Carrito de compras
+      <span class="cart-count"
+        >{{ cartService.getItems()().length }} items</span
+      >
+    </h2>
+  </header>
+
+  @if (cartService.getItems()().length === 0) {
+  <div class="empty-cart">
+    <i class="fas fa-shopping-cart empty-cart-icon"></i>
+    <p>Tu carrito está vacío</p>
+    <button class="back-button" routerLink="/app/sales">
+      <i class="fas fa-arrow-left"></i>
+      Continuar comprando
+    </button>
+  </div>
+  } @else {
+  <div class="cart-grid">
+    @for (item of cartService.getItems()(); track item.id) {
+    <div class="cart-card">
+      <div class="image-container">
+        <img
+          *ngIf="item.photos && item.photos.length > 0"
+          [src]="item.photos[0].url"
+          alt="{{ item.title }}"
+          class="card-image"
+        />
+        <span class="gender-badge">{{ item.gender }}</span>
+      </div>
+      <div class="card-content">
+        <h3>{{ item.title }}</h3>
+        <div class="card-details">
+          <span><i class="fas fa-venus-mars"></i> {{ item.gender }}</span>
+          <span class="separator">•</span>
+          <span
+            ><i class="fas fa-calendar"></i> Edad:
+            {{ item.birthDate | ageCalculator}}</span
+          >
+        </div>
+        <div class="card-footer">
+          <p class="price">₡{{ item.price }}</p>
+          <div class="action-buttons">
+            <button
+              class="action-button remove"
+              (click)="cartService.removeItem(item.id!)"
+            >
+              <i class="fas fa-trash"></i>
+              Remover
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+
+  <div class="cart-summary">
+    <p class="total">Total: ₡{{ cartService.getTotal() }}</p>
+    <div class="cart-actions">
+      <button class="clear-button" (click)="cartService.clearCart()">
+        <i class="fas fa-trash-alt"></i>
+        Vaciar carrito
+      </button>
+      <button class="checkout-button" (click)="checkout()">
+        {{ isProcessing ? "Procesando..." : "Pagar con PayPal" }}
+      </button>
+    </div>
+  </div>
+  }
+</div>

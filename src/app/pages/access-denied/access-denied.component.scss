@@ -1,0 +1,44 @@
+// Variables de colores
+$primary-color: #77c040;
+$secondary-color: #333333;
+$third-color: #ffcb40;
+$text-white: #ffffff;
+$text-muted: #b5b9bd;
+$card-radius: 15px;
+$cool-color: #d3e97a;
+h1 {
+  color: #e74c3c;
+  font-weight: 500;
+  font-size: 30px;
+}
+
+p {
+  font-size: 20px;
+}
+
+.contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#image {
+  height: 400px;
+  width: 350px;
+}
+
+.btn-return {
+  margin-top: 20px;
+  margin-left: 70px;
+  padding: 10px 20px;
+  background-color: #77c040;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-return:hover {
+  background-color: #333;
+}

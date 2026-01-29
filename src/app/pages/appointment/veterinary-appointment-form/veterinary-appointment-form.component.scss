@@ -1,0 +1,390 @@
+$primary-color: #77c040;
+$secondary-color: #333333;
+$third-color: #ffcb40;
+$text-white: #ffffff;
+$text-muted: #b5b9bd;
+$card-radius: 15px;
+$cool-color: #d3e97a;
+
+.appointment-form {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .progress-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3rem;
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+
+      .step-number {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: $text-muted;
+        color: $text-white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s ease;
+      }
+
+      .step-label {
+        color: $text-muted;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+      }
+
+      &.active {
+        .step-number {
+          background: $primary-color;
+          box-shadow: 0 0 0 4px rgba($primary-color, 0.2);
+        }
+
+        .step-label {
+          color: $primary-color;
+          font-weight: 600;
+        }
+      }
+
+      &.completed {
+        .step-number {
+          background: $cool-color;
+        }
+
+        .step-label {
+          color: $secondary-color;
+        }
+      }
+    }
+
+    .step-line {
+      flex: 1;
+      height: 3px;
+      background: $text-muted;
+      margin: 0 1rem;
+      margin-bottom: 2rem;
+      max-width: 100px;
+    }
+  }
+
+  .section-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: $secondary-color;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    i {
+      color: $primary-color;
+      font-size: 1.4rem;
+    }
+  }
+
+  .date-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+
+    .date-card {
+      background: white;
+      border-radius: $card-radius;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      &.selected {
+        border-color: $primary-color;
+        background: rgba($cool-color, 0.1);
+
+        .selection-indicator {
+          opacity: 1;
+        }
+      }
+
+      .date-weekday {
+        color: $text-muted;
+        font-size: 0.9rem;
+        text-transform: capitalize;
+        margin-bottom: 0.5rem;
+      }
+
+      .date-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: $secondary-color;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+      }
+
+      .date-month {
+        color: $primary-color;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .selection-indicator {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        color: $primary-color;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+    }
+  }
+
+  .time-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+
+    .time-slot {
+      background: white;
+      border-radius: $card-radius;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      position: relative;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      &.selected {
+        border-color: $primary-color;
+        background: rgba($cool-color, 0.1);
+
+        .selection-indicator {
+          opacity: 1;
+        }
+      }
+
+      .time-icon {
+        background: rgba($primary-color, 0.1);
+        color: $primary-color;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+      }
+
+      .time-range {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: $secondary-color;
+        font-weight: 500;
+
+        .time-separator {
+          color: $text-muted;
+        }
+      }
+
+      .selection-indicator {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        color: $primary-color;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+    }
+  }
+
+  .vet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    .vet-card {
+      background: white;
+      border-radius: $card-radius;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      position: relative;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      &.selected {
+        border-color: $primary-color;
+        background: rgba($cool-color, 0.1);
+
+        .selection-indicator {
+          opacity: 1;
+        }
+
+        .vet-avatar {
+          background: rgba($primary-color, 0.1);
+
+          i {
+            color: $primary-color;
+          }
+        }
+      }
+
+      .vet-avatar {
+        width: 60px;
+        height: 60px;
+        background: rgba($text-muted, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        transition: all 0.3s ease;
+
+        i {
+          font-size: 2rem;
+          color: $text-muted;
+          transition: all 0.3s ease;
+        }
+      }
+
+      .vet-info {
+        flex: 1;
+
+        .vet-name {
+          font-weight: 600;
+          color: $secondary-color;
+          font-size: 1.1rem;
+          margin-bottom: 0.25rem;
+        }
+
+        .vet-lastname {
+          color: $text-muted;
+          font-size: 0.9rem;
+        }
+
+        .vet-speciality {
+          color: $primary-color;
+          font-size: 0.9rem;
+        }
+      }
+
+      .selection-indicator {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        color: $primary-color;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+    }
+  }
+
+  .appointment-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+
+    .submit-button {
+      background: $primary-color;
+      color: $text-white;
+      border: none;
+      border-radius: $card-radius;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba($primary-color, 0.2);
+
+      &:hover {
+        background: darken($primary-color, 5%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba($primary-color, 0.3);
+      }
+
+      &:disabled {
+        background: $text-muted;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      i {
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  .step-content {
+    min-height: 400px;
+    position: relative;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+
+    .back-button {
+      background: none;
+      border: none;
+      color: $text-muted;
+      padding: 0.5rem;
+      border-radius: $card-radius;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+
+      i {
+        font-size: 1.2rem;
+      }
+
+      &:hover {
+        color: $primary-color;
+        background: rgba($primary-color, 0.1);
+      }
+    }
+
+    .section-title {
+      margin-bottom: 0;
+    }
+  }
+}

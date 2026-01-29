@@ -1,0 +1,213 @@
+<div style="background-color: #fff">
+  <!--Navbar-->
+  <header>
+    <div id="rural">
+      <p>Rural <span>Animal</span></p>
+    </div>
+    <nav style="font-size: 20px">
+      <a
+        href="#"
+        onclick="document.getElementById('beneficios').scrollIntoView({ behavior: 'smooth' }); return false;"
+        class="mx-3"
+        >Beneficios</a
+      >
+      <a
+        href="#"
+        onclick="document.getElementById('servicios').scrollIntoView({ behavior: 'smooth' }); return false;"
+        class="mx-3"
+        >Servicios</a
+      >
+      <a
+        href="#"
+        onclick="document.getElementById('empezar').scrollIntoView({ behavior: 'smooth' }); return false;"
+        class="mx-3"
+        >¿Cómo unirse?</a
+      >
+      <a href="#" routerLink="/signup" class="mx-3"> Regístrate </a>
+      <a href="#" routerLink="/login" class="mx-3"> Inicia Sesión </a>
+    </nav>
+  </header>
+
+  <!-- Hero section -->
+
+  <section>
+    <div id="hero" style="display: flex">
+      <div>
+        <img
+          id="cerdo-hero"
+          src="../../../assets/img/animals/cerdoHero.png"
+          alt="cerdo rosado feliz"
+        />
+      </div>
+      <div id="mercado">
+        <h2>Rural Animal</h2>
+        <h2 id="hero-texto">¡Tu Mercado de Animales de Granja!</h2>
+        <p id="hero-texto2">
+          Compra, vende y subasta tus animales de granja de forma fácil y
+          segura.
+        </p>
+        <a href="#" routerLink="/login" id="btn-inicia">Inicia sesión </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Beneficios -->
+
+  <section id="beneficios">
+    <div class="container">
+      <div>
+        <h3 id="beneficios-plataforma">
+          Beneficios de nuestra <span style="color: #000">plataforma</span>
+        </h3>
+      </div>
+      <div>
+        <ul>
+          <li>Fácil Registro</li>
+          <li>Amplia Variedad de Animales</li>
+          <li>Subastas en Tiempo Real</li>
+          <li>Comunidad de Agricultores</li>
+          <li>Animales certificados con SENASA</li>
+        </ul>
+      </div>
+      <div>
+        <img
+          src="../../../assets/img/animals/pig2.png"
+          alt="cerdo recostado sobre sus patas en en suelo"
+          class="cerdo-bene"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Te ofrecemos -->
+  <section id="servicios" style="text-align: center">
+    <div class="container">
+      <h3 id="titulo-servicios">Te ofrecemos</h3>
+      <div id="iconos-servicios" style="display: flex; justify-content: center">
+        <!-- Icono de Venta -->
+        <div class="servicio-item">
+          <div class="icono-circulo">
+            <i
+              class="fa-solid fa-money-bill"
+              style="color: #000000; font-size: 38px"
+            ></i>
+          </div>
+          <p class="texto-servicio">Venta</p>
+        </div>
+
+        <!-- Icono de Compra -->
+        <div class="servicio-item">
+          <div class="icono-circulo">
+            <i
+              class="fa-solid fa-hand-holding-usd"
+              style="color: #000000; font-size: 38px"
+            ></i>
+          </div>
+          <p class="texto-servicio">Compra</p>
+        </div>
+
+        <!-- Icono de Subasta -->
+        <div class="servicio-item">
+          <div class="icono-circulo">
+            <i
+              class="fa-solid fa-chart-line"
+              style="color: #000000; font-size: 38px"
+            ></i>
+          </div>
+          <p class="texto-servicio">Subasta</p>
+        </div>
+
+        <!-- Icono de Veterinaria -->
+        <div class="servicio-item">
+          <div class="icono-circulo">
+            <i
+              class="fa-solid fa-stethoscope"
+              style="color: #000000; font-size: 38px"
+            ></i>
+          </div>
+          <p class="texto-servicio">Veterinaria</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Como empezar -->
+
+  <section id="empezar">
+    <div class="container">
+      <h3>¿Cómo empezar?</h3>
+      <div class="steps">
+        <div class="step">
+          <p class="step-title">Fácil Registro</p>
+          <p class="step-description">
+            Crea tu cuenta en minutos y comienza tu viaje en el mundo de los
+            animales de granja.
+          </p>
+        </div>
+        <div class="step">
+          <p class="step-title">Explora Ofertas</p>
+          <p class="step-description">
+            Navega por nuestra amplia selección de animales disponibles para la
+            compra y subasta.
+          </p>
+        </div>
+        <div class="step">
+          <p class="step-title">Participa en Subastas</p>
+          <p class="step-description">
+            Únete a emocionantes subastas en línea y puja por tus animales
+            favoritos.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Registrate gratis -->
+
+  <section id="registrate">
+    <div id="registrate-container" class="container">
+      <div class="text-container">
+        <h3>Regístrate gratis y empieza hoy</h3>
+        <a
+          href="http://localhost:4200/login"
+          target="_blank"
+          class="register-button"
+          >Registrarse</a
+        >
+      </div>
+      <div class="image-container">
+        <img
+          src="../../../assets/img/animals/pig3.png"
+          alt="cerdo de pie viendo al frente"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer  -->
+  <section id="pie-pagina">
+    <div class="container">
+      <div class="brand-section">
+        <h3>Rural <span>Animal</span></h3>
+        <div class="social-icons">
+          <a
+            href="https://www.instagram.com/accounts/emailsignup/"
+            target="_blank"
+            aria-label="Instagram"
+            style="text-decoration: none"
+          >
+            <i class="fab fa-instagram fa-2xl"></i>
+          </a>
+          <a
+            href="https://www.facebook.com/?locale=es_LA"
+            target="_blank"
+            aria-label="Facebook"
+            style="text-decoration: none"
+          >
+            <i class="fab fa-facebook fa-2xl"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
