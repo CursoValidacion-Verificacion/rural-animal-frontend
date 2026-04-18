@@ -1,0 +1,56 @@
+{
+  "validUsers": [
+    {
+      "email": "carlos.test@gmail.com",
+      "password": "Test123!@",
+      "role": "BUYER",
+      "description": "Usuario comprador válido"
+    },
+    {
+      "email": "maria.test@gmail.com",
+      "password": "Test123!@",
+      "role": "SELLER",
+      "description": "Usuario vendedor válido"
+    }
+  ],
+  "adminUser": {
+    "email": "admin.user@gmail.com",
+    "password": "admin123",
+    "role": "ADMIN",
+    "description": "Usuario administrador"
+  },
+  "invalidUsers": [
+    {
+      "email": "noexiste@test.com",
+      "password": "wrongpass123",
+      "description": "Credenciales completamente inválidas"
+    },
+    {
+      "email": "carlos.test@gmail.com",
+      "password": "wrongpassword",
+      "description": "Email válido con contraseña incorrecta"
+    },
+    {
+      "email": "",
+      "password": "",
+      "description": "Campos vacíos"
+    },
+    {
+      "email": "correo-invalido",
+      "password": "123456",
+      "description": "Formato de email inválido"
+    }
+  ],
+  "newUser": {
+    "name": "Usuario",
+    "lastName1": "Prueba",
+    "lastName2": "Playwright",
+    "identification": "101230456",
+    "email": "e2etest_{timestamp}@test.com",
+    "password": "Test123!@",
+    "confirmPassword": "Test123!@",
+    "phoneNumber": "88881234",
+    "birthDate": "2000-01-15",
+    "role": "BUYER"
+  }
+}

@@ -140,3 +140,11 @@ dist
 .angular/cache/17.3.7/vite/deps_temp_3420332f/
 
 .DS_Store
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+/e2e/reports/
