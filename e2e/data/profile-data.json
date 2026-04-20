@@ -1,0 +1,16 @@
+{
+  "validProfileUpdate": {
+    "firstName": "Carlos",
+    "lastName": "Mendez",
+    "phone": "61234567",
+    "address": "San Jose Centro"
+  },
+  "invalidProfileUpdate": {
+    "firstName": "",
+    "lastName": "",
+    "phone": "",
+    "address": ""
+  },
+  "successMessage": "Perfil actualizado",
+  "errorMessage": "Datos inválidos"
+}

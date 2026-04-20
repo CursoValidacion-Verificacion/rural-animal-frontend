@@ -1,12 +1,24 @@
 import { type Page } from '@playwright/test';
 import { ENV } from '../config/env.config';
 
+import { LoginPage } from '../pages/login.page';
+
+import fs from 'fs';
+import path from 'path';
+
+
 /** Estructura de la respuesta del endpoint de autenticación. */
 interface AuthTokenResponse {
   token: string;
   expiresIn: number;
   authUser: Record<string, unknown>;
 }
+
+type User = {
+  username: string;
+  password: string;
+  role: string;
+};
 
 /**
  * Hace login contra la API y guarda los tokens en el localStorage del navegador,
@@ -59,4 +71,18 @@ export async function logout(page: Page): Promise<void> {
 export function generateUniqueEmail(): string {
   const timestamp = Date.now();
   return `e2etest_${timestamp}@test.com`;
+}
+
+export function readJson<T>(relativePath: string): T {
+  const fullPath = path.resolve(process.cwd(), relativePath);
+  const raw = fs.readFileSync(fullPath, 'utf-8');
+  return JSON.parse(raw) as T;
+}
+
+
+
+export async function loginAs(page: Page, user: User) {
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.login(user.username, user.password);
 }

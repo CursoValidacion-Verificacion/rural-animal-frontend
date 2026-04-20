@@ -1,0 +1,16 @@
+{
+  "validAppointment": {
+    "petName": "Rocky",
+    "date": "2026-05-01",
+    "time": "10:00",
+    "reason": "Vacunación",
+    "successMessage": "Cita agendada correctamente"
+  },
+  "invalidAppointment": {
+    "petName": "",
+    "date": "",
+    "time": "",
+    "reason": "",
+    "errorMessage": "Todos los campos son obligatorios"
+  }
+}

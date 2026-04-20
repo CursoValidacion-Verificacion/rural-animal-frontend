@@ -1,0 +1,9 @@
+{
+  "productToAdd": {
+    "name": "Dog Food Premium"
+  },
+  "productToRemove": {
+    "name": "Cat Toy Deluxe"
+  },
+  "successMessage": "Producto agregado"
+}

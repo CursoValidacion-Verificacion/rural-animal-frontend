@@ -1,0 +1,12 @@
+{
+  "validBid": {
+    "auctionTitle": "French Bulldog Champion",
+    "bidAmount": 500,
+    "successMessage": "Puja realizada correctamente"
+  },
+  "invalidBid": {
+    "auctionTitle": "French Bulldog Champion",
+    "bidAmount": 10,
+    "errorMessage": "La puja debe ser mayor a la actual"
+  }
+}

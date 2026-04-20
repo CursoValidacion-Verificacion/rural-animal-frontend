@@ -1,0 +1,10 @@
+{
+  "buyerToAdmin": {
+    "receiver": "admin",
+    "message": "Hola, necesito ayuda con mi pedido."
+  },
+  "adminToBuyer": {
+    "receiver": "carlos",
+    "message": "Tu solicitud fue revisada correctamente."
+  }
+}
