@@ -118,11 +118,11 @@ jobs:
       - name: Start frontend
         working-directory: frontend
         run: |
-          nohup npm start > frontend.log 2>&1 &
+           npm start > frontend.log 2>&1 &
 
       - name: Wait for frontend
         run: |
-          for i in {1..60}; do
+          for i in {1..30}; do
             if curl -s http://127.0.0.1:4200 > /dev/null; then
               echo "Frontend is up"
               exit 0
