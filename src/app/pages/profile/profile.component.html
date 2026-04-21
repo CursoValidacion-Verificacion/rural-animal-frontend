@@ -52,7 +52,7 @@
           {{ nameError }}
         </div>
         <p *ngIf="!isEditing">
-          {{ (userToEdit ?? profileService.user$())?.name ?? "No disponible" }}
+          {{ (userToEdit ?? profileService.user$()).name ?? "No disponible" }}
         </p>
       </div>
       <div class="border-bottom my-3">
@@ -70,7 +70,7 @@
         </div>
         <p *ngIf="!isEditing">
           {{
-            (userToEdit ?? profileService.user$())?.lastName1 ?? "No disponible"
+            (userToEdit ?? profileService.user$()).lastName1 ?? "No disponible"
           }}
         </p>
       </div>
@@ -85,7 +85,7 @@
         />
         <p *ngIf="!isEditing">
           {{
-            (userToEdit ?? profileService.user$())?.lastName2 ?? "No disponible"
+            (userToEdit ?? profileService.user$()).lastName2 ?? "No disponible"
           }}
         </p>
       </div>
@@ -104,7 +104,7 @@
         </div>
         <p *ngIf="!isEditing">
           {{
-            (userToEdit ?? profileService.user$())?.identification ??
+            (userToEdit ?? profileService.user$()).identification ??
               "No disponible"
           }}
         </p>
@@ -129,7 +129,7 @@
         </div>
         <p *ngIf="!isEditing">
           {{
-            (userToEdit ?? profileService.user$())?.birthDate ?? "No disponible"
+            (userToEdit ?? profileService.user$()).birthDate ?? "No disponible"
               | ageCalculator : "years"
           }}
         </p>
@@ -137,7 +137,7 @@
       <div class="border-bottom my-3">
         <label>Correo electrónico</label>
         <p>
-          {{ (userToEdit ?? profileService.user$())?.email ?? "No disponible" }}
+          {{ (userToEdit ?? profileService.user$()).email ?? "No disponible" }}
         </p>
       </div>
     </div>
@@ -148,12 +148,12 @@
         <label>Rol</label>
         <p>
           {{
-            (userToEdit ?? profileService.user$())?.role?.title ??
+            (userToEdit ?? profileService.user$()).role?.title ??
               "No disponible"
           }}
         </p>
       </div>
-      @if((userToEdit ?? profileService.user$())?.role?.title === 'SELLER'){
+      @if((userToEdit ?? profileService.user$()).role?.title === 'SELLER'){
       <div class="border-bottom my-3">
         <label>Certificado SENASA</label>
         <input
@@ -163,7 +163,7 @@
           placeholder="Ingresa tu número de certificado de SENASA"
         />
         <p *ngIf="!isEditing">
-          {{ (userToEdit ?? profileService.user$())?.vco ?? "No disponible" }}
+          {{ (userToEdit ?? profileService.user$()).vco ?? "No disponible" }}
         </p>
       </div>
       }
@@ -181,7 +181,7 @@
           {{ phoneNumberError }}
         </div>
         <p *ngIf="!isEditing">
-          {{ profileService.user$()?.phoneNumber ?? "No disponible" }}
+          {{ profileService.user$().phoneNumber ?? "No disponible" }}
         </p>
       </div>
       <div *ngIf="!isEditing">
@@ -189,7 +189,7 @@
           <label>Provincia</label>
           <p>
             {{
-              (userToEdit ?? profileService.user$())?.direction?.province ??
+              (userToEdit ?? profileService.user$()).direction?.province ??
                 "No disponible"
             }}
           </p>
@@ -198,7 +198,7 @@
           <label>Cantón</label>
           <p>
             {{
-              (userToEdit ?? profileService.user$())?.direction?.canton ??
+              (userToEdit ?? profileService.user$()).direction?.canton ??
                 "No disponible"
             }}
           </p>
@@ -207,7 +207,7 @@
           <label>Distrito</label>
           <p>
             {{
-              (userToEdit ?? profileService.user$())?.direction?.district ??
+              (userToEdit ?? profileService.user$()).direction?.district ??
                 "No disponible"
             }}
           </p>
@@ -216,7 +216,7 @@
           <label>Otras señas</label>
           <p>
             {{
-              (userToEdit ?? profileService.user$())?.direction?.otherDetails ??
+              (userToEdit ?? profileService.user$()).direction?.otherDetails ??
                 "No disponible"
             }}
           </p>
