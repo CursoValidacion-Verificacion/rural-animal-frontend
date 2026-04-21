@@ -55,12 +55,13 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Setup Java
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
-          cache: maven
+          java-version: '21'
+          cache: gradle
+          cache-dependency-path: backend/build.gradle
 
       - name: Install frontend/root dependencies
         run: npm ci
