@@ -120,19 +120,6 @@ jobs:
         run: |
            npm start > frontend.log 2>&1 &
 
-      - name: Wait for frontend
-        run: |
-          for i in {1..30}; do
-            if curl -s http://127.0.0.1:4200 > /dev/null; then
-              echo "Frontend is up"
-              exit 0
-            fi
-            echo "Waiting for frontend..."
-            sleep 5
-          done
-          echo "Frontend failed to start"
-          cat frontend/frontend.log || true
-          exit 1
 
       - name: Run Playwright tests
         working-directory: frontend
