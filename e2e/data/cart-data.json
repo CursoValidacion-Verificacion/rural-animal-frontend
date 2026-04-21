@@ -1,9 +1,8 @@
 {
   "productToAdd": {
-    "name": "Dog Food Premium"
+    "name": "Toro Brahman"
   },
   "productToRemove": {
-    "name": "Cat Toy Deluxe"
-  },
-  "successMessage": "Producto agregado"
+    "name": "Toro Brahman"
+  }
 }

@@ -1,109 +1,175 @@
 import { type Page, type Locator, expect } from '@playwright/test';
 import { BasePage } from './base.page';
 
-/**
- * Page Object que representa la gestión de citas veterinarias.
- * Permite registrar una nueva cita y validar el historial de citas agendadas.
- */
 export class VetAppointmentsPage extends BasePage {
-    /** Campo de nombre de mascota. */
-    readonly petNameInput: Locator;
-    /** Campo de fecha de la cita. */
-    readonly dateInput: Locator;
-    /** Campo de hora de la cita. */
-    readonly timeInput: Locator;
-    /** Campo de motivo o descripción de la cita. */
-    readonly reasonInput: Locator;
-    /** Botón para guardar/agendar la cita. */
-    readonly saveButton: Locator;
-    /** Tabla o lista de historial de citas. */
-    readonly historyTable: Locator;
-    /** Mensaje de éxito al registrar la cita. */
-    readonly successMessage: Locator;
-    /** Mensaje de error o validación. */
-    readonly errorMessage: Locator;
-    /** Título de la sección de citas veterinarias. */
-    readonly pageTitle: Locator;
+    // Tabs
+    readonly myAppointmentsTab: Locator;
+    readonly scheduleAppointmentTab: Locator;
 
-    /**
-     * @param page - Instancia de la página de Playwright inyectada desde el test.
-     */
+    // Stepper
+    readonly stepDate: Locator;
+    readonly stepTime: Locator;
+    readonly stepVeterinarian: Locator;
+
+    // Step 1 - fechas
+    readonly dateCards: Locator;
+
+    // Step 2 - horarios
+    readonly backButtons: Locator;
+    readonly timeSlots: Locator;
+
+    // Step 3 - veterinarios
+    readonly vetCards: Locator;
+    readonly confirmButton: Locator;
+
+    // Historial / listado
+    readonly appointmentsSection: Locator;
+    readonly appointmentsTitle: Locator;
+    readonly appointmentsContent: Locator;
+
+    // Mensajes generales
+    readonly loader: Locator;
+
     constructor(page: Page) {
         super(page);
-        this.petNameInput = page.locator('#petName, input[formcontrolname="petName"]');
-        this.dateInput = page.locator('#date, input[type="date"]');
-        this.timeInput = page.locator('#time, input[type="time"]');
-        this.reasonInput = page.locator('#reason, textarea[formcontrolname="reason"]');
-        this.saveButton = page.locator('button:has-text("Agendar"), button:has-text("Guardar"), button[type="submit"]');
-        this.historyTable = page.locator('table, .appointment-history, .history-list');
-        this.successMessage = page.locator('.alert-success, .toast-success, .success-message');
-        this.errorMessage = page.locator('.alert-danger, .text-danger, .error-message');
-        this.pageTitle = page.locator('h1, h2').filter({ hasText: /citas veterinarias|veterinarias|appointments/i });
+
+        // Tabs
+        this.myAppointmentsTab = page.locator('#appointments-tab');
+        this.scheduleAppointmentTab = page.locator('#calendar-tab');
+
+        // Stepper
+        this.stepDate = page.locator('.step-label', { hasText: 'Fecha' });
+        this.stepTime = page.locator('.step-label', { hasText: 'Hora' });
+        this.stepVeterinarian = page.locator('.step-label', { hasText: 'Veterinario' });
+
+        // Paso 1
+        this.dateCards = page.locator('.date-card');
+
+        // Paso 2
+        this.backButtons = page.locator('button.back-button');
+        this.timeSlots = page.locator('.time-slot');
+
+        // Paso 3
+        this.vetCards = page.locator('.vet-card');
+        this.confirmButton = page.locator('button.submit-button');
+
+        // Historial
+        this.appointmentsSection = page.locator('#appointments');
+        this.appointmentsTitle = page.getByText('Citas veterinarias');
+        this.appointmentsContent = page.locator('#appointments app-veterinary-appointment-list, #appointments');
+
+        // General
+        this.loader = page.locator('app-loader');
     }
 
-    /** Navega a la página de citas veterinarias. */
     async goto(): Promise<void> {
-        await this.navigateTo('/vet-appointments');
+        await this.navigateTo('/app/veterinary-appointments');
     }
 
-    /**
-     * Completa y guarda una nueva cita veterinaria.
-     *
-     * @param petName - Nombre de la mascota.
-     * @param date - Fecha de la cita.
-     * @param time - Hora de la cita.
-     * @param reason - Motivo de la cita.
-     */
-    async createAppointment(
-        petName: string,
-        date: string,
-        time: string,
-        reason: string
-    ): Promise<void> {
-        await this.petNameInput.fill(petName);
-        await this.dateInput.fill(date);
-        await this.timeInput.fill(time);
-        await this.reasonInput.fill(reason);
-        await this.saveButton.click();
+    async waitForPageReady(): Promise<void> {
+        const loaderVisible = await this.loader.isVisible().catch(() => false);
+        if (loaderVisible) {
+            await expect(this.loader).toBeHidden({ timeout: 15000 });
+        }
     }
 
-    /**
-     * Verifica que el historial contenga una cita con el nombre de la mascota indicado.
-     *
-     * @param petName - Nombre de la mascota esperado en el historial.
-     */
-    async expectAppointmentInHistory(petName: string): Promise<void> {
-        await expect(this.historyTable).toBeVisible();
-        await expect(this.historyTable).toContainText(petName);
+    async openMyAppointmentsTab(): Promise<void> {
+        await expect(this.myAppointmentsTab).toBeVisible();
+        await this.myAppointmentsTab.click();
     }
 
-    /**
-     * Verifica que se muestre un mensaje de éxito al agendar una cita.
-     *
-     * @param message - Texto esperado del mensaje.
-     */
-    async expectSuccessMessage(message: string): Promise<void> {
-        await expect(this.successMessage).toBeVisible();
-        await expect(this.successMessage).toContainText(message);
+    async openScheduleAppointmentTab(): Promise<void> {
+        await expect(this.scheduleAppointmentTab).toBeVisible();
+        await this.scheduleAppointmentTab.click();
     }
 
-    /**
-     * Verifica que se muestre un mensaje de error o validación.
-     *
-     * @param message - Texto esperado del mensaje.
-     */
-    async expectErrorMessage(message: string): Promise<void> {
-        await expect(this.errorMessage).toBeVisible();
-        await expect(this.errorMessage).toContainText(message);
-    }
-
-    /**
-     * Verifica que los elementos principales de la página estén visibles.
-     */
     async expectAppointmentsPageVisible(): Promise<void> {
-        await expect(this.pageTitle).toBeVisible();
-        await expect(this.petNameInput).toBeVisible();
-        await expect(this.dateInput).toBeVisible();
-        await expect(this.saveButton).toBeVisible();
+        await this.waitForPageReady();
+        await expect(this.myAppointmentsTab).toBeVisible();
+        await expect(this.scheduleAppointmentTab).toBeVisible();
+    }
+
+    async expectSchedulingWizardVisible(): Promise<void> {
+        await expect(this.stepDate).toBeVisible();
+        await expect(this.stepTime).toBeVisible();
+        await expect(this.stepVeterinarian).toBeVisible();
+    }
+
+    async selectFirstAvailableDate(): Promise<void> {
+        await expect(this.dateCards.first()).toBeVisible();
+        await this.dateCards.first().click();
+    }
+
+    async selectDateByIndex(index: number): Promise<void> {
+        await expect(this.dateCards.nth(index)).toBeVisible();
+        await this.dateCards.nth(index).click();
+    }
+
+    async expectTimeStepVisible(): Promise<void> {
+        await expect(this.timeSlots.first()).toBeVisible();
+    }
+
+    async selectFirstAvailableTimeSlot(): Promise<void> {
+        await expect(this.timeSlots.first()).toBeVisible();
+        await this.timeSlots.first().click();
+    }
+
+    async selectTimeSlotByIndex(index: number): Promise<void> {
+        await expect(this.timeSlots.nth(index)).toBeVisible();
+        await this.timeSlots.nth(index).click();
+    }
+
+    async expectVeterinarianStepVisible(): Promise<void> {
+        await expect(this.vetCards.first()).toBeVisible();
+        await expect(this.confirmButton).toBeVisible();
+    }
+
+    async selectFirstAvailableVeterinarian(): Promise<void> {
+        await expect(this.vetCards.first()).toBeVisible();
+        await this.vetCards.first().click();
+    }
+
+    async selectVeterinarianByIndex(index: number): Promise<void> {
+        await expect(this.vetCards.nth(index)).toBeVisible();
+        await this.vetCards.nth(index).click();
+    }
+
+    async confirmAppointment(): Promise<void> {
+        await expect(this.confirmButton).toBeVisible();
+        await expect(this.confirmButton).toBeEnabled();
+        await this.confirmButton.click();
+    }
+
+    async scheduleAppointmentWithFirstAvailableOptions(): Promise<void> {
+        await this.openScheduleAppointmentTab();
+        await this.expectSchedulingWizardVisible();
+
+        await this.selectFirstAvailableDate();
+        await this.expectTimeStepVisible();
+
+        await this.selectFirstAvailableTimeSlot();
+        await this.expectVeterinarianStepVisible();
+
+        await this.selectFirstAvailableVeterinarian();
+        await this.confirmAppointment();
+    }
+
+    async expectAppointmentsHistoryVisible(): Promise<void> {
+        await this.openMyAppointmentsTab();
+        await expect(this.appointmentsSection).toBeVisible();
+        await expect(this.appointmentsContent).toBeVisible();
+    }
+
+    async expectHistoryContainsText(text: string): Promise<void> {
+        await this.openMyAppointmentsTab();
+        await expect(this.appointmentsContent).toContainText(text);
+    }
+
+    async expectSuccessMessage(message: string): Promise<void> {
+        await expect(this.page.getByText(message, { exact: false })).toBeVisible();
+    }
+
+    async expectErrorMessage(message: string): Promise<void> {
+        await expect(this.page.getByText(message, { exact: false })).toBeVisible();
     }
 }

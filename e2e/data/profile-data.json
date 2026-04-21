@@ -1,16 +1,24 @@
 {
   "validProfileUpdate": {
-    "firstName": "Carlos",
-    "lastName": "Mendez",
-    "phone": "61234567",
-    "address": "San Jose Centro"
+    "name": "Carlos",
+    "lastName1": "Ramirez",
+    "lastName2": "Lopez",
+    "identification": "123456789",
+    "birthDate": "1998-05-20",
+    "phoneNumber": "88887777",
+    "province": "San José",
+    "canton": "Central",
+    "district": "Carmen",
+    "otherDetails": "Casa azul frente al parque"
   },
   "invalidProfileUpdate": {
-    "firstName": "",
-    "lastName": "",
-    "phone": "",
-    "address": ""
+    "name": "",
+    "lastName1": "",
+    "lastName2": "",
+    "identification": "abc",
+    "birthDate": "2030-01-01",
+    "phoneNumber": "12"
   },
-  "successMessage": "Perfil actualizado",
-  "errorMessage": "Datos inválidos"
+  "successMessage": "Perfil actualizado correctamente",
+  "errorMessage": "Por favor corrige los errores del formulario"
 }

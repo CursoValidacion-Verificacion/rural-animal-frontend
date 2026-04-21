@@ -1,12 +1,12 @@
 {
   "validBid": {
-    "auctionTitle": "French Bulldog Champion",
-    "bidAmount": 500,
+    "auctionTitle": "Toro Brahman",
+    "buttonText": "Pujar",
     "successMessage": "Puja realizada correctamente"
   },
   "invalidBid": {
-    "auctionTitle": "French Bulldog Champion",
-    "bidAmount": 10,
-    "errorMessage": "La puja debe ser mayor a la actual"
+    "auctionTitle": "Subasta cerrada",
+    "buttonText": "No disponible",
+    "errorMessage": "No puedes participar"
   }
 }
