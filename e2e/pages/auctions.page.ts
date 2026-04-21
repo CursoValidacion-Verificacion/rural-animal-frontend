@@ -45,7 +45,7 @@ export class AuctionsPage extends BasePage {
     }
 
     async goto(): Promise<void> {
-        await this.navigateTo('/app/auctions');
+        await this.navigateTo('/app/appointment');
     }
 
     async expectAuctionsListVisible(): Promise<void> {

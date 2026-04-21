@@ -22,7 +22,9 @@ test.describe('Citas Veterinarias @vet @e2e', () => {
 
         await page.waitForURL(/\/app\//, { timeout: 15000 });
         await vetAppointmentsPage.goto();
-        await vetAppointmentsPage.expectAppointmentsPageVisible();
+
+// SIEMPRE abre el tab correcto
+        await vetAppointmentsPage.openScheduleAppointmentTab();
     });
 
     test('Debe mostrar correctamente la página de citas veterinarias', async () => {
@@ -61,6 +63,8 @@ test.describe('Citas Veterinarias @vet @e2e', () => {
     });
 
     test('No debe permitir confirmar una cita sin seleccionar veterinario', async () => {
+        await vetAppointmentsPage.goto();
+
         await vetAppointmentsPage.openScheduleAppointmentTab();
         await vetAppointmentsPage.expectSchedulingWizardVisible();
 
@@ -70,6 +74,7 @@ test.describe('Citas Veterinarias @vet @e2e', () => {
         await vetAppointmentsPage.selectFirstAvailableTimeSlot();
         await vetAppointmentsPage.expectVeterinarianStepVisible();
 
+        // 🔥 Validación fuerte
         await expect(vetAppointmentsPage.confirmButton).toBeDisabled();
     });
 });

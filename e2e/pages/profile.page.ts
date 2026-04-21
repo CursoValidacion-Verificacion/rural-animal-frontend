@@ -38,7 +38,7 @@ export class ProfilePage extends BasePage {
     }
 
     async goto(): Promise<void> {
-        await this.navigateTo('/profile');
+        await this.navigateTo('/app/profile');
     }
 
     async clickEdit(): Promise<void> {

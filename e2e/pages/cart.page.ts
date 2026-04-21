@@ -55,7 +55,7 @@ export class CartPage extends BasePage {
     }
 
     async gotoCart(): Promise<void> {
-        await this.navigateTo('/app/cart');
+        await this.navigateTo('/app/shopping-cart');
     }
 
     async expectSalesListVisible(): Promise<void> {
