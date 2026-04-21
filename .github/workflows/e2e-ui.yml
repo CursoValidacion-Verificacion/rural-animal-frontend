@@ -118,7 +118,7 @@ jobs:
       - name: Start frontend
         working-directory: frontend
         run: |
-          nohup npm start -- --host 0.0.0.0 > frontend.log 2>&1 &
+          nohup npm start > frontend.log 2>&1 &
 
       - name: Wait for frontend
         run: |
