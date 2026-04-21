@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs';
 import {AuctionMessage} from "@app/interfaces/auction-message";
+import { environment } from 'src/environments/environment';
 
 /**
  * Servicio para gestionar las conexiones WebSocket para subastas.
@@ -26,7 +27,8 @@ export class AuctionService {
             this.socket.close();
         }
 
-        this.socket = new WebSocket(`ws://localhost:8080/auction-ws?auctionId=${auctionId}`);
+        const wsBaseUrl = environment.webSocketUrl.replace(/\/$/, '');
+        this.socket = new WebSocket(`${wsBaseUrl}/auction-ws?auctionId=${auctionId}`);
         this.messages = new Subject<AuctionMessage>();
 
         this.socket.onopen = () => {

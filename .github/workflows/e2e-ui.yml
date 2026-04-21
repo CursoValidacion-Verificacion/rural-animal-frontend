@@ -1,48 +1,18 @@
-name: E2E UI Automation
+name: E2E UI Staging
 
 on:
   push:
-    branches: [ "main", "develop", "pipeline-test" ]
+    branches: [ "staging" ]
   pull_request:
-    branches: [ "main", "develop", "pipeline-test" ]
+    branches: [ "staging" ]
+  workflow_dispatch:
 
 jobs:
   e2e-tests:
     runs-on: ubuntu-latest
-
-    services:
-      mariadb:
-        image: mariadb:11
-        env:
-          MARIADB_ROOT_PASSWORD: 12345
-          MARIADB_DATABASE: proyecto3_test
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mariadb-admin ping -h 127.0.0.1 -uroot -p12345"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=10
-
-      redis:
-        image: redis:7
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd="redis-cli ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=10
-
+    timeout-minutes: 30
     env:
-      SPRING_DATASOURCE_URL: jdbc:mariadb://localhost:3306/proyecto3_test
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 12345
-      SPRING_DATA_REDIS_HOST: localhost
-      SPRING_DATA_REDIS_PORT: 6379
-      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
-      SPRING_PROFILES_ACTIVE: test
-      PLAYWRIGHT_BASE_URL: http://127.0.0.1:4200
+      BASE_URL: http://127.0.0.1:4200
       CI: true
 
     steps:
@@ -55,54 +25,43 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 21
-          cache: maven
-
-      - name: Install frontend/root dependencies
+      - name: Install dependencies
         run: npm ci
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Build backend
-        run: mvn -B clean package -DskipTests
-
-      - name: Start backend
+      - name: Configure staging backend for E2E
+        env:
+          API_URL: ${{ secrets.RAILWAY_STAGING_API_URL }}
+          WS_URL: ${{ secrets.RAILWAY_STAGING_WS_URL }}
         run: |
-          nohup java -jar target/*.jar > backend.log 2>&1 &
-        shell: bash
+          if [ -z "$API_URL" ]; then
+            echo "Missing required secret: RAILWAY_STAGING_API_URL"
+            exit 1
+          fi
 
-      - name: Wait for backend
-        run: npx wait-on http://127.0.0.1:8080
+          if [ -z "$WS_URL" ]; then
+            WS_URL="${API_URL/https:\/\//wss://}"
+            WS_URL="${WS_URL/http:\/\//ws://}"
+          fi
 
-      - name: Start frontend Angular
-        run: |
-          nohup npm run start -- --host 0.0.0.0 --port 4200 > frontend.log 2>&1 &
-        shell: bash
+          cat > src/assets/runtime-env.js <<EOF
+          window.__RURAL_ANIMAL_API_URL__ = "$API_URL";
+          window.__RURAL_ANIMAL_WS_URL__ = "$WS_URL";
+          EOF
 
-      - name: Wait for frontend
-        run: npx wait-on http://127.0.0.1:4200
+      - name: Run Playwright tests against staging backend
+        env:
+          API_URL: ${{ secrets.RAILWAY_STAGING_API_URL }}
+        run: npm run test:e2e
 
-      - name: Run Playwright tests
-        run: npx playwright test
-
-      - name: Upload Playwright HTML report
+      - name: Upload Playwright artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
-          path: playwright-report
-          retention-days: 14
-
-      - name: Upload logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: execution-logs
+          name: playwright-artifacts
           path: |
-            backend.log
-            frontend.log
+            e2e/reports/html
+            test-results
+          retention-days: 14

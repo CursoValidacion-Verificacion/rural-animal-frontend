@@ -22,7 +22,7 @@ export class ChatService {
   /** Objeto WebSocket para gestionar la conexión. */
   private socket$: WebSocketSubject<any> | null = null;
   /** URL del endpoint WebSocket. */
-  private readonly WS_ENDPOINT = `ws://${environment.webSocketUrl}/chat`;
+  private readonly WS_ENDPOINT = `${environment.webSocketUrl.replace(/\/$/, '')}/chat`;
   /** Señal que mantiene el historial de mensajes del chat. */
   private messagesSignal = signal<IChatMessage[]>([]);
   /** Señal que indica el estado de la conexión: 'connected', 'disconnected' o 'error'. */

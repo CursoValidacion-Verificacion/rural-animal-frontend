@@ -22,3 +22,26 @@ Crear una plataforma que facilite y centralice las operaciones de compra, venta 
 ---
 
 ¡Bienvenidos a Rural Animal! 🌾
+
+---
+
+## Flujo E2E Frontend -> Backend Staging (Railway)
+
+El workflow de E2E está en `.github/workflows/e2e-ui.yml` y se ejecuta en:
+- `push` a `staging`
+- `pull_request` hacia `staging`
+- ejecución manual (`workflow_dispatch`)
+
+### Variables requeridas en GitHub Secrets (repo frontend)
+
+- `RAILWAY_STAGING_API_URL`  
+  Ejemplo: `https://tu-api-staging.up.railway.app`
+- `RAILWAY_STAGING_WS_URL` (opcional)  
+  Si no se define, el workflow la deriva automáticamente desde `RAILWAY_STAGING_API_URL`.
+
+### Cómo funciona
+
+1. El workflow genera `src/assets/runtime-env.js` con las URLs de staging.
+2. Playwright levanta el frontend local (`http://127.0.0.1:4200`).
+3. El frontend consume el backend de Railway usando `runtime-env.js`.
+4. Los tests E2E se ejecutan con `npm run test:e2e`.
