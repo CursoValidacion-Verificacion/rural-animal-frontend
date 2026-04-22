@@ -35,8 +35,7 @@ test.describe('Citas Veterinarias @vet @e2e', () => {
   });
 
   test('Debe bloquear la confirmación hasta seleccionar veterinario', async () => {
-    const hasAvailableDates = await vetAppointmentsPage.hasAvailableDates();
-    test.skip(!hasAvailableDates, 'No hay fechas disponibles para validar reglas de formulario.');
+    await vetAppointmentsPage.hasAvailableDates();
 
     await vetAppointmentsPage.expectSubmitDisabledWithoutVeterinarianSelection();
   });
