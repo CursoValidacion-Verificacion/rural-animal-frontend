@@ -28,7 +28,7 @@ test.describe('Login Exitoso - Happy Path @login @happy', () => {
       const currentUrl = page.url();
       expect(currentUrl).toContain('/app/');
 
-      // El token se guarda de forma asíncrona; se espera a que aparezca en localStorage
+      // El token se guarda de forma asíncrona, se espera a que aparezca en localStorage
       await page.waitForFunction(() => localStorage.getItem('access_token') !== null, { timeout: 10_000 });
 
       const token = await page.evaluate(() => localStorage.getItem('access_token'));

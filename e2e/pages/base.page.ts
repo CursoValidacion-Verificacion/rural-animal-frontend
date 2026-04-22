@@ -28,7 +28,7 @@ export abstract class BasePage {
    * @param urlPattern - Cadena exacta o expresión regular con la URL esperada.
    */
   async waitForUrl(urlPattern: string | RegExp): Promise<void> {
-    await this.page.waitForURL(urlPattern, { timeout: 30_000 });
+    await this.page.waitForURL(urlPattern, { timeout: 15_000 });
   }
 
   /**
