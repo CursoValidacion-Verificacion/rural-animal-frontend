@@ -143,15 +143,7 @@ test.describe('Subastas @auctions @e2e', () => {
         test.skip(!ownAuction, 'No hay subastas propias activas para validar error de puja.');
 
         await auctionsPage.openAuction(ownAuction!.title);
-
-        const consoleErrorPromise = page.waitForEvent('console', {
-            timeout: 15_000,
-            predicate: (message) =>
-                message.type() === 'error' &&
-                message.text().includes('No puedes pujar en tu propia subasta'),
-        });
-
         await auctionsPage.placeBidAndConfirm();
-        await consoleErrorPromise;
+        await auctionsPage.expectBidError('No puedes pujar en tu propia subasta');
     });
 });

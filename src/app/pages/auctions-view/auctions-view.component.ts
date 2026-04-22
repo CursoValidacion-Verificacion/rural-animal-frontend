@@ -127,8 +127,12 @@ export class AuctionsViewComponent implements OnInit, OnDestroy {
                 bidDate: message.bidDate
             };
         } else if (message?.action === "error") {
+            const errorMessage = typeof message.message === 'string' && message.message.trim().length > 0
+                ? message.message
+                : 'No fue posible realizar la puja.';
 
-            console.error('Error del servidor:', message.message);
+            console.error('Error del servidor:', errorMessage);
+            this.sweetAlert.error('Error al pujar', errorMessage);
         }
     }
 

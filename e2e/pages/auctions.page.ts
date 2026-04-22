@@ -24,6 +24,12 @@ export class AuctionsPage extends BasePage {
     readonly bidConfirmationModal: Locator;
     /** Botón de confirmar en modal de puja. */
     readonly confirmBidButton: Locator;
+    /** Modal de error de SweetAlert2. */
+    readonly bidErrorModal: Locator;
+    /** Contenido textual del modal de error. */
+    readonly bidErrorMessage: Locator;
+    /** Botón de aceptar en modal de error. */
+    readonly acceptErrorButton: Locator;
 
     /**
      * @param page - Instancia de la página de Playwright inyectada desde el test.
@@ -39,6 +45,9 @@ export class AuctionsPage extends BasePage {
         this.noBidsText = page.locator('.no-bids');
         this.bidConfirmationModal = page.locator('.swal2-popup');
         this.confirmBidButton = page.getByRole('button', { name: 'Sí, confirmar' });
+        this.bidErrorModal = page.locator('.swal2-popup.swal2-icon-error');
+        this.bidErrorMessage = this.bidErrorModal.locator('.swal2-html-container');
+        this.acceptErrorButton = this.bidErrorModal.getByRole('button', { name: 'Aceptar' });
     }
 
     /** Navega a la página de subastas. */
@@ -78,7 +87,19 @@ export class AuctionsPage extends BasePage {
         await this.bidButton.click();
         await expect(this.bidConfirmationModal).toBeVisible();
         await this.confirmBidButton.click();
-        await expect(this.bidConfirmationModal).toBeHidden();
+        await expect(this.confirmBidButton).toBeHidden();
+    }
+
+    /**
+     * Verifica que el intento de puja muestre un error visible en UI.
+     *
+     * @param errorText - Texto esperado del error.
+     */
+    async expectBidError(errorText: string): Promise<void> {
+        await expect(this.bidErrorModal).toBeVisible({ timeout: 15_000 });
+        await expect(this.bidErrorMessage).toContainText(errorText);
+        await this.acceptErrorButton.click();
+        await expect(this.bidErrorModal).toBeHidden();
     }
 
     /**
