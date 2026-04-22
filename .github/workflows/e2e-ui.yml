@@ -55,10 +55,8 @@ jobs:
             WS_URL="${WS_URL/http:\/\//ws://}"
           fi
 
-          cat > src/assets/runtime-env.js <<EOF
-          window.__RURAL_ANIMAL_API_URL__ = "$API_URL";
-          window.__RURAL_ANIMAL_WS_URL__ = "$WS_URL";
-          EOF
+          printf 'window.__RURAL_ANIMAL_API_URL__ = "%s";\nwindow.__RURAL_ANIMAL_WS_URL__ = "%s";\n' \
+            "$API_URL" "$WS_URL" > src/assets/runtime-env.js
 
       - name: Run Playwright tests against staging backend
         env:
@@ -80,20 +78,20 @@ jobs:
         run: |
           mkdir -p e2e/reports/html
           if [ ! -f e2e/reports/html/index.html ]; then
-            cat > e2e/reports/html/index.html <<'EOF'
-            <!doctype html>
-            <html lang="en">
-              <head>
-                <meta charset="utf-8" />
-                <title>Playwright Report</title>
-              </head>
-              <body>
-                <h1>No Playwright HTML report was generated.</h1>
-                <p>The test run may have failed before report generation.</p>
-                <p>Check the GitHub Actions logs and artifacts for details.</p>
-              </body>
-            </html>
-            EOF
+            {
+              echo '<!doctype html>'
+              echo '<html lang="en">'
+              echo '  <head>'
+              echo '    <meta charset="utf-8" />'
+              echo '    <title>Playwright Report</title>'
+              echo '  </head>'
+              echo '  <body>'
+              echo '    <h1>No Playwright HTML report was generated.</h1>'
+              echo '    <p>The test run may have failed before report generation.</p>'
+              echo '    <p>Check the GitHub Actions logs and artifacts for details.</p>'
+              echo '  </body>'
+              echo '</html>'
+            } > e2e/reports/html/index.html
           fi
 
       - name: Upload report artifact for GitHub Pages
