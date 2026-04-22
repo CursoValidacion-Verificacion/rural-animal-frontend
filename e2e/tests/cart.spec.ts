@@ -32,13 +32,11 @@ test.describe('Carrito de Compras @cart @e2e', () => {
 
   test('Debe agregar un producto al carrito correctamente', async () => {
     await cartPage.gotoSales();
-    const hasSales = await cartPage.hasSalesAvailable();
-    // test.skip(!hasSales, 'No hay publicaciones de ventas disponibles para el test de carrito.');
+    await cartPage.hasSalesAvailable();
 
     await cartPage.openFirstSaleDetails();
 
     const publicationTitle = await cartPage.getCurrentDetailTitle();
-    // test.skip(!publicationTitle, 'No se encontró una publicación válida para agregar al carrito.');
 
     await cartPage.addCurrentPublicationToCart();
     await cartPage.goToCartFromDetails();
@@ -48,8 +46,7 @@ test.describe('Carrito de Compras @cart @e2e', () => {
 
   test('Debe eliminar un producto del carrito', async () => {
     await cartPage.gotoSales();
-    const hasSales = await cartPage.hasSalesAvailable();
-    // test.skip(!hasSales, 'No hay publicaciones de ventas disponibles para el test de carrito.');
+    await cartPage.hasSalesAvailable();
 
     await cartPage.openFirstSaleDetails();
     await cartPage.addCurrentPublicationToCart();
