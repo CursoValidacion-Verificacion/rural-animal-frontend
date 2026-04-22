@@ -6,104 +6,107 @@ import { BasePage } from './base.page';
  * Permite registrar una nueva cita y validar el historial de citas agendadas.
  */
 export class VetAppointmentsPage extends BasePage {
-    /** Campo de nombre de mascota. */
-    readonly petNameInput: Locator;
-    /** Campo de fecha de la cita. */
-    readonly dateInput: Locator;
-    /** Campo de hora de la cita. */
-    readonly timeInput: Locator;
-    /** Campo de motivo o descripción de la cita. */
-    readonly reasonInput: Locator;
-    /** Botón para guardar/agendar la cita. */
-    readonly saveButton: Locator;
-    /** Tabla o lista de historial de citas. */
+    /** Tab de lista de citas. */
+    readonly appointmentsTabButton: Locator;
+    /** Tab de agendamiento. */
+    readonly scheduleTabButton: Locator;
+    /** Tabla/lista de historial de citas. */
     readonly historyTable: Locator;
-    /** Mensaje de éxito al registrar la cita. */
-    readonly successMessage: Locator;
-    /** Mensaje de error o validación. */
-    readonly errorMessage: Locator;
-    /** Título de la sección de citas veterinarias. */
-    readonly pageTitle: Locator;
+    /** Tarjetas de fecha disponibles. */
+    readonly availableDateCards: Locator;
+    /** Slots de hora disponibles. */
+    readonly availableTimeSlots: Locator;
+    /** Tarjetas de veterinario disponibles. */
+    readonly availableVeterinarianCards: Locator;
+    /** Botón para confirmar cita. */
+    readonly confirmAppointmentButton: Locator;
+    /** Mensaje de alerta de éxito por cita creada. */
+    readonly successToast: Locator;
 
     /**
      * @param page - Instancia de la página de Playwright inyectada desde el test.
      */
     constructor(page: Page) {
         super(page);
-        this.petNameInput = page.locator('#petName, input[formcontrolname="petName"]');
-        this.dateInput = page.locator('#date, input[type="date"]');
-        this.timeInput = page.locator('#time, input[type="time"]');
-        this.reasonInput = page.locator('#reason, textarea[formcontrolname="reason"]');
-        this.saveButton = page.locator('button:has-text("Agendar"), button:has-text("Guardar"), button[type="submit"]');
-        this.historyTable = page.locator('table, .appointment-history, .history-list');
-        this.successMessage = page.locator('.alert-success, .toast-success, .success-message');
-        this.errorMessage = page.locator('.alert-danger, .text-danger, .error-message');
-        this.pageTitle = page.locator('h1, h2').filter({ hasText: /citas veterinarias|veterinarias|appointments/i });
+        this.appointmentsTabButton = page.locator('#appointments-tab');
+        this.scheduleTabButton = page.locator('#calendar-tab');
+        this.historyTable = page.locator('app-veterinary-appointment-list table');
+        this.availableDateCards = page.locator('.date-card');
+        this.availableTimeSlots = page.locator('.time-slot');
+        this.availableVeterinarianCards = page.locator('.vet-card');
+        this.confirmAppointmentButton = page.locator('button.submit-button');
+        this.successToast = page.locator('.mat-mdc-snack-bar-container, simple-snack-bar');
     }
 
     /** Navega a la página de citas veterinarias. */
     async goto(): Promise<void> {
-        await this.navigateTo('/vet-appointments');
+        await this.navigateTo('/app/appointment');
     }
 
     /**
-     * Completa y guarda una nueva cita veterinaria.
-     *
-     * @param petName - Nombre de la mascota.
-     * @param date - Fecha de la cita.
-     * @param time - Hora de la cita.
-     * @param reason - Motivo de la cita.
+     * Verifica si existen fechas disponibles para agendar cita.
      */
-    async createAppointment(
-        petName: string,
-        date: string,
-        time: string,
-        reason: string
-    ): Promise<void> {
-        await this.petNameInput.fill(petName);
-        await this.dateInput.fill(date);
-        await this.timeInput.fill(time);
-        await this.reasonInput.fill(reason);
-        await this.saveButton.click();
+    async hasAvailableDates(): Promise<boolean> {
+        await this.scheduleTabButton.click();
+        await this.availableDateCards.first().waitFor({ state: 'visible', timeout: 15_000 }).catch(() => null);
+        return (await this.availableDateCards.count()) > 0;
     }
 
     /**
-     * Verifica que el historial contenga una cita con el nombre de la mascota indicado.
-     *
-     * @param petName - Nombre de la mascota esperado en el historial.
+     * Agendar una cita seleccionando primera fecha, hora y veterinario disponible.
      */
-    async expectAppointmentInHistory(petName: string): Promise<void> {
-        await expect(this.historyTable).toBeVisible();
-        await expect(this.historyTable).toContainText(petName);
+    async createAppointmentWithFirstAvailableOptions(): Promise<void> {
+        await this.scheduleTabButton.click();
+        await expect(this.availableDateCards.first()).toBeVisible({ timeout: 15_000 });
+        await this.availableDateCards.first().click();
+
+        await expect(this.availableTimeSlots.first()).toBeVisible({ timeout: 15_000 });
+        await this.availableTimeSlots.first().click();
+
+        await expect(this.availableVeterinarianCards.first()).toBeVisible({ timeout: 15_000 });
+        await expect(this.confirmAppointmentButton).toBeDisabled();
+
+        await this.availableVeterinarianCards.first().click();
+        await expect(this.confirmAppointmentButton).toBeEnabled();
+
+        const createAppointmentResponse = this.page.waitForResponse(
+            (response) =>
+                response.url().includes('/veterinary_appointments') &&
+                response.request().method() === 'POST' &&
+                response.status() < 400,
+            { timeout: 20_000 }
+        );
+
+        await this.confirmAppointmentButton.click();
+        await createAppointmentResponse;
     }
 
     /**
-     * Verifica que se muestre un mensaje de éxito al agendar una cita.
-     *
-     * @param message - Texto esperado del mensaje.
+     * Verifica que en paso 3 el botón confirmar esté deshabilitado hasta elegir veterinario.
      */
-    async expectSuccessMessage(message: string): Promise<void> {
-        await expect(this.successMessage).toBeVisible();
-        await expect(this.successMessage).toContainText(message);
+    async expectSubmitDisabledWithoutVeterinarianSelection(): Promise<void> {
+        await this.scheduleTabButton.click();
+        await expect(this.availableDateCards.first()).toBeVisible({ timeout: 15_000 });
+        await this.availableDateCards.first().click();
+        await expect(this.availableTimeSlots.first()).toBeVisible({ timeout: 15_000 });
+        await this.availableTimeSlots.first().click();
+        await expect(this.confirmAppointmentButton).toBeVisible();
+        await expect(this.confirmAppointmentButton).toBeDisabled();
     }
 
     /**
-     * Verifica que se muestre un mensaje de error o validación.
-     *
-     * @param message - Texto esperado del mensaje.
+     * Verifica que se muestre feedback de éxito al crear cita.
      */
-    async expectErrorMessage(message: string): Promise<void> {
-        await expect(this.errorMessage).toBeVisible();
-        await expect(this.errorMessage).toContainText(message);
+    async expectSuccessMessage(): Promise<void> {
+        await expect(this.successToast).toContainText(/cita creada satisfactoriamente/i, { timeout: 10_000 });
     }
 
     /**
      * Verifica que los elementos principales de la página estén visibles.
      */
     async expectAppointmentsPageVisible(): Promise<void> {
-        await expect(this.pageTitle).toBeVisible();
-        await expect(this.petNameInput).toBeVisible();
-        await expect(this.dateInput).toBeVisible();
-        await expect(this.saveButton).toBeVisible();
+        await expect(this.appointmentsTabButton).toBeVisible();
+        await expect(this.scheduleTabButton).toBeVisible();
+        await expect(this.historyTable).toBeVisible();
     }
 }

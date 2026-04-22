@@ -25,6 +25,10 @@ test.describe('Chat Interactivo @chat @e2e', () => {
         await loginPage.login(buyerUser.email, buyerUser.password);
 
         await page.waitForURL(/\/app\//, { timeout: 15_000 });
+        await page.waitForFunction(
+            () => !!localStorage.getItem('access_token') && !!localStorage.getItem('auth_user'),
+            { timeout: 15_000 }
+        );
     });
 
     test('Debe permitir enviar un mensaje en el chat interactivo', async () => {

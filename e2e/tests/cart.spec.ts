@@ -24,6 +24,10 @@ test.describe('Carrito de Compras @cart @e2e', () => {
         await loginPage.login(buyerUser.email, buyerUser.password);
 
         await page.waitForURL(/\/app\//, { timeout: 15_000 });
+        await page.waitForFunction(
+            () => !!localStorage.getItem('access_token') && !!localStorage.getItem('auth_user'),
+            { timeout: 15_000 }
+        );
         await cartPage.clearCartStorage();
     });
 

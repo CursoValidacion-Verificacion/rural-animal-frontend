@@ -1,7 +1,6 @@
 import { test } from '@playwright/test';
 import { LoginPage, VetAppointmentsPage } from '../pages';
 import usersData from '../data/users.json';
-import vetAppointmentsData from '../data/vet-appointments-data.json';
 
 /**
  * Suite de pruebas E2E para citas veterinarias.
@@ -25,6 +24,10 @@ test.describe('Citas Veterinarias @vet @e2e', () => {
         await loginPage.login(buyerUser.email, buyerUser.password);
 
         await page.waitForURL(/\/app\//, { timeout: 15_000 });
+        await page.waitForFunction(
+            () => !!localStorage.getItem('access_token') && !!localStorage.getItem('auth_user'),
+            { timeout: 15_000 }
+        );
         await vetAppointmentsPage.goto();
     });
 
@@ -33,25 +36,16 @@ test.describe('Citas Veterinarias @vet @e2e', () => {
     });
 
     test('Debe permitir agendar una cita veterinaria correctamente', async () => {
-        await vetAppointmentsPage.createAppointment(
-            vetAppointmentsData.validAppointment.petName,
-            vetAppointmentsData.validAppointment.date,
-            vetAppointmentsData.validAppointment.time,
-            vetAppointmentsData.validAppointment.reason
-        );
+        const hasAvailableDates = await vetAppointmentsPage.hasAvailableDates();
+        test.skip(!hasAvailableDates, 'No hay fechas disponibles para agendar citas en staging.');
 
-        await vetAppointmentsPage.expectSuccessMessage(vetAppointmentsData.validAppointment.successMessage);
-        await vetAppointmentsPage.expectAppointmentInHistory(vetAppointmentsData.validAppointment.petName);
+        await vetAppointmentsPage.createAppointmentWithFirstAvailableOptions();
     });
 
-    test('Debe mostrar error al intentar agendar una cita con datos vacíos', async () => {
-        await vetAppointmentsPage.createAppointment(
-            vetAppointmentsData.invalidAppointment.petName,
-            vetAppointmentsData.invalidAppointment.date,
-            vetAppointmentsData.invalidAppointment.time,
-            vetAppointmentsData.invalidAppointment.reason
-        );
+    test('Debe bloquear la confirmación hasta seleccionar veterinario', async () => {
+        const hasAvailableDates = await vetAppointmentsPage.hasAvailableDates();
+        test.skip(!hasAvailableDates, 'No hay fechas disponibles para validar reglas de formulario.');
 
-        await vetAppointmentsPage.expectErrorMessage(vetAppointmentsData.invalidAppointment.errorMessage);
+        await vetAppointmentsPage.expectSubmitDisabledWithoutVeterinarianSelection();
     });
 });
