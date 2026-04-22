@@ -6,48 +6,43 @@ import { BasePage } from './base.page';
  * Permite abrir conversaciones y enviar mensajes.
  */
 export class ChatPage extends BasePage {
-    /** Campo de búsqueda de usuarios o conversaciones. */
-    readonly searchUserInput: Locator;
-    /** Lista de usuarios o conversaciones disponibles. */
-    readonly conversationItems: Locator;
     /** Área de entrada de mensaje. */
     readonly messageInput: Locator;
     /** Botón para enviar mensaje. */
     readonly sendButton: Locator;
-    /** Lista o contenedor de mensajes del chat. */
-    readonly messageBubbles: Locator;
-    /** Título o encabezado del chat actual. */
-    readonly chatHeader: Locator;
-    /** Mensaje de error del chat, si aplica. */
-    readonly errorMessage: Locator;
+    /** Contenedor principal de mensajes. */
+    readonly chatContainer: Locator;
+    /** Estado de conexión del chat. */
+    readonly connectionStatus: Locator;
+    /** Mensajes del usuario. */
+    readonly userMessages: Locator;
+    /** Mensajes del asistente. */
+    readonly assistantMessages: Locator;
 
     /**
      * @param page - Instancia de la página de Playwright inyectada desde el test.
      */
     constructor(page: Page) {
         super(page);
-        this.searchUserInput = page.locator('input[placeholder*="Buscar"], input[placeholder*="usuario"]');
-        this.conversationItems = page.locator('.conversation-item, .chat-user, .list-group-item');
-        this.messageInput = page.locator('textarea, input[placeholder*="mensaje"]');
-        this.sendButton = page.locator('button:has-text("Enviar"), button:has-text("Send")');
-        this.messageBubbles = page.locator('.message-bubble, .chat-message, .message');
-        this.chatHeader = page.locator('.chat-header, h2, h3');
-        this.errorMessage = page.locator('.alert-danger, .text-danger, .error-message');
+        this.messageInput = page.locator('.input-group input.form-control');
+        this.sendButton = page.locator('button.btn-send');
+        this.chatContainer = page.locator('.chat-container');
+        this.connectionStatus = page.locator('.connection-status');
+        this.userMessages = page.locator('.message-row.user .message-content');
+        this.assistantMessages = page.locator('.message-row.assistant .message-content');
     }
 
     /** Navega a la sección de chat. */
     async goto(): Promise<void> {
-        await this.navigateTo('/chat');
+        await this.navigateTo('/app/chat-bot');
     }
 
     /**
-     * Busca un usuario y abre la primera conversación encontrada.
-     *
-     * @param username - Nombre del usuario con quien se desea chatear.
+     * Espera hasta que el websocket del chat esté conectado.
      */
-    async openConversation(username: string): Promise<void> {
-        await this.searchUserInput.fill(username);
-        await this.conversationItems.first().click();
+    async waitForConnected(): Promise<void> {
+        await expect(this.connectionStatus).toContainText('Conectado', { timeout: 20_000 });
+        await expect(this.messageInput).toBeEnabled();
     }
 
     /**
@@ -56,25 +51,33 @@ export class ChatPage extends BasePage {
      * @param message - Texto del mensaje a enviar.
      */
     async sendMessage(message: string): Promise<void> {
+        await this.waitForConnected();
         await this.messageInput.fill(message);
         await this.sendButton.click();
     }
 
     /**
-     * Verifica que el último mensaje visible contenga el texto esperado.
+     * Verifica que exista un mensaje del usuario con el texto enviado.
      *
      * @param message - Texto esperado.
      */
-    async expectLastMessage(message: string): Promise<void> {
-        await expect(this.messageBubbles.last()).toBeVisible();
-        await expect(this.messageBubbles.last()).toContainText(message);
+    async expectUserMessage(message: string): Promise<void> {
+        await expect(this.userMessages.filter({ hasText: message }).first()).toBeVisible();
     }
 
     /**
-     * Verifica que los elementos principales de la conversación estén visibles.
+     * Verifica que exista al menos una respuesta del asistente.
+     */
+    async expectAssistantReply(): Promise<void> {
+        await expect(this.assistantMessages.last()).toBeVisible({ timeout: 20_000 });
+    }
+
+    /**
+     * Verifica que los elementos principales del chat estén visibles.
      */
     async expectChatVisible(): Promise<void> {
-        await expect(this.chatHeader).toBeVisible();
+        await expect(this.chatContainer).toBeVisible();
+        await expect(this.connectionStatus).toBeVisible();
         await expect(this.messageInput).toBeVisible();
         await expect(this.sendButton).toBeVisible();
     }

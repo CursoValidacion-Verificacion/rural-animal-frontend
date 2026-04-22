@@ -7,82 +7,111 @@ import { BasePage } from './base.page';
  * y eliminar elementos.
  */
 export class CartPage extends BasePage {
-    /** Campo de búsqueda de productos. */
-    readonly searchInput: Locator;
-    /** Lista o grid de productos. */
-    readonly productCards: Locator;
-    /** Botones para agregar productos al carrito. */
-    readonly addToCartButtons: Locator;
-    /** Ícono o enlace para abrir el carrito. */
-    readonly cartButton: Locator;
-    /** Contador visual de productos en el carrito. */
-    readonly cartBadge: Locator;
-    /** Filas o tarjetas de productos dentro del carrito. */
+    /** Lista de tarjetas de publicaciones de ventas. */
+    readonly salesCards: Locator;
+    /** Mensaje vacío de publicaciones. */
+    readonly emptySalesMessage: Locator;
+    /** Botón para abrir detalle de una venta. */
+    readonly detailButtons: Locator;
+    /** Título del detalle de una publicación. */
+    readonly detailTitle: Locator;
+    /** Botón principal en detalle (Comprar / Ir al carrito). */
+    readonly buyButton: Locator;
+    /** Tarjetas de productos dentro del carrito. */
     readonly cartItems: Locator;
+    /** Títulos de productos dentro del carrito. */
+    readonly cartItemTitles: Locator;
     /** Botones para eliminar productos del carrito. */
     readonly removeButtons: Locator;
     /** Mensaje que indica que el carrito está vacío. */
     readonly emptyCartMessage: Locator;
-    /** Mensaje de confirmación al agregar producto. */
-    readonly successMessage: Locator;
 
     /**
      * @param page - Instancia de la página de Playwright inyectada desde el test.
      */
     constructor(page: Page) {
         super(page);
-        this.searchInput = page.locator('input[placeholder*="Buscar"], input[type="search"]');
-        this.productCards = page.locator('.product-card, .card');
-        this.addToCartButtons = page.locator('button:has-text("Agregar al carrito"), button:has-text("Add to cart")');
-        this.cartButton = page.locator('a[href*="cart"], button:has(.fa-shopping-cart), .cart-btn');
-        this.cartBadge = page.locator('.cart-badge, .badge, .cart-count');
-        this.cartItems = page.locator('.cart-item, .cart-row, tbody tr');
-        this.removeButtons = page.locator('button:has-text("Eliminar"), button:has-text("Remove")');
-        this.emptyCartMessage = page.locator('text=/carrito.*vac[ií]o|cart is empty/i');
-        this.successMessage = page.locator('.alert-success, .toast-success, .success-message');
+        this.salesCards = page.locator('.sales-publications .card');
+        this.emptySalesMessage = page.getByText('No hay publicaciones disponibles.');
+        this.detailButtons = page.locator('button.details-button');
+        this.detailTitle = page.locator('.title');
+        this.buyButton = page.locator('button.comprar-button');
+        this.cartItems = page.locator('.cart-card');
+        this.cartItemTitles = page.locator('.cart-card h3');
+        this.removeButtons = page.locator('button.action-button.remove');
+        this.emptyCartMessage = page.getByText('Tu carrito está vacío');
     }
 
-    /** Navega a la página de productos o tienda. */
-    async gotoShop(): Promise<void> {
-        await this.navigateTo('/shop');
+    /** Navega a la página de ventas. */
+    async gotoSales(): Promise<void> {
+        await this.navigateTo('/app/sales');
     }
 
     /** Navega directamente a la página del carrito. */
     async gotoCart(): Promise<void> {
-        await this.navigateTo('/cart');
+        await this.navigateTo('/app/shopping-cart');
     }
 
     /**
-     * Busca un producto por nombre.
-     *
-     * @param productName - Nombre del producto a buscar.
+     * Espera a que la lista de ventas cargue (con tarjetas o estado vacío).
      */
-    async searchProduct(productName: string): Promise<void> {
-        await this.searchInput.fill(productName);
+    async waitForSalesLoaded(): Promise<void> {
+        await Promise.race([
+            this.salesCards.first().waitFor({ state: 'visible', timeout: 15_000 }),
+            this.emptySalesMessage.waitFor({ state: 'visible', timeout: 15_000 }),
+        ]);
     }
 
     /**
-     * Agrega el primer producto visible al carrito.
+     * Indica si existen publicaciones de ventas disponibles.
      */
-    async addFirstProductToCart(): Promise<void> {
-        await this.addToCartButtons.first().click();
+    async hasSalesAvailable(): Promise<boolean> {
+        await this.waitForSalesLoaded();
+        const cardsCount = await this.salesCards.count();
+        return cardsCount > 0;
     }
 
     /**
-     * Busca un producto y agrega el primero de los resultados al carrito.
-     *
-     * @param productName - Nombre del producto a agregar.
+     * Abre el detalle de la primera publicación disponible.
      */
-    async searchAndAddProduct(productName: string): Promise<void> {
-        await this.searchProduct(productName);
-        await this.addFirstProductToCart();
+    async openFirstSaleDetails(): Promise<void> {
+        await this.waitForSalesLoaded();
+        await expect(this.salesCards.first()).toBeVisible();
+        await this.detailButtons.first().click();
+        await expect(this.detailTitle).toBeVisible();
     }
 
     /**
-     * Abre la vista del carrito.
+     * Obtiene el título de la publicación en detalle.
      */
-    async openCart(): Promise<void> {
-        await this.cartButton.click();
+    async getCurrentDetailTitle(): Promise<string> {
+        return (await this.detailTitle.textContent())?.trim() ?? '';
+    }
+
+    /**
+     * Agrega la publicación actual al carrito.
+     */
+    async addCurrentPublicationToCart(): Promise<void> {
+        await expect(this.buyButton).toBeVisible();
+        await expect(this.buyButton).toHaveText(/Comprar|Ir al carrito/);
+        await this.buyButton.click();
+        await expect(this.buyButton).toHaveText('Ir al carrito');
+    }
+
+    /**
+     * Navega al carrito desde el botón del detalle.
+     */
+    async goToCartFromDetails(): Promise<void> {
+        await expect(this.buyButton).toHaveText('Ir al carrito');
+        await this.buyButton.click();
+        await this.waitForUrl(/\/app\/shopping-cart/);
+    }
+
+    /**
+     * Limpia el carrito almacenado en localStorage.
+     */
+    async clearCartStorage(): Promise<void> {
+        await this.page.evaluate(() => localStorage.removeItem('shopping_cart'));
     }
 
     /**
@@ -107,12 +136,11 @@ export class CartPage extends BasePage {
     }
 
     /**
-     * Verifica que se muestre un mensaje de éxito al agregar un producto.
+     * Verifica que exista un título específico dentro del carrito.
      *
-     * @param message - Texto esperado del mensaje.
+     * @param title - Título esperado.
      */
-    async expectSuccessMessage(message: string): Promise<void> {
-        await expect(this.successMessage).toBeVisible();
-        await expect(this.successMessage).toContainText(message);
+    async expectCartContainsTitle(title: string): Promise<void> {
+        await expect(this.cartItemTitles.filter({ hasText: title }).first()).toBeVisible();
     }
 }

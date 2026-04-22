@@ -1,7 +1,79 @@
-import { test } from '@playwright/test';
+import { type Page, test } from '@playwright/test';
 import { LoginPage, AuctionsPage } from '../pages';
 import usersData from '../data/users.json';
-import auctionsData from '../data/auctions-data.json';
+import { ENV } from '../config/env.config';
+
+interface AuctionApiItem {
+    id: number;
+    title: string;
+    price: number;
+    state?: string;
+    startDate?: string;
+    endDate?: string;
+    minimumIncrease?: number;
+    user?: {
+        id?: number;
+    };
+}
+
+interface AuctionsApiResponse {
+    data: AuctionApiItem[];
+}
+
+function isAuctionOpen(auction: AuctionApiItem): boolean {
+    if (!auction.startDate || !auction.endDate) {
+        return false;
+    }
+    const now = Date.now();
+    const startsAt = new Date(auction.startDate).getTime();
+    const endsAt = new Date(auction.endDate).getTime();
+
+    return auction.state === 'Activa' && startsAt <= now && endsAt > now;
+}
+
+function parseStoredJsonValue<T>(value: string | null): T | null {
+    if (!value) return null;
+
+    try {
+        return JSON.parse(value) as T;
+    } catch {
+        return value as unknown as T;
+    }
+}
+
+async function getAuthSession(page: Page) {
+    const session = await page.evaluate(() => ({
+        tokenRaw: localStorage.getItem('access_token'),
+        userRaw: localStorage.getItem('auth_user'),
+    }));
+
+    const token = parseStoredJsonValue<string>(session.tokenRaw);
+    const authUser = parseStoredJsonValue<{ id?: number }>(session.userRaw);
+
+    if (!token || !authUser?.id) {
+        throw new Error('No se pudo obtener sesión autenticada desde localStorage.');
+    }
+
+    return {
+        token,
+        userId: authUser.id,
+    };
+}
+
+async function fetchAuctions(page: Page, token: string): Promise<AuctionApiItem[]> {
+    const response = await page.request.get(`${ENV.API_URL}/publications/auctions`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (!response.ok()) {
+        throw new Error(`No se pudo consultar /publications/auctions. Status: ${response.status()}`);
+    }
+
+    const payload = await response.json() as AuctionsApiResponse;
+    return payload.data ?? [];
+}
 
 /**
  * Suite de pruebas E2E para subastas.
@@ -28,22 +100,54 @@ test.describe('Subastas @auctions @e2e', () => {
         await auctionsPage.goto();
     });
 
-    test('Debe permitir abrir una subasta y visualizar su detalle', async () => {
-        await auctionsPage.openAuction(auctionsData.validBid.auctionTitle);
+    test('Debe permitir abrir una subasta y visualizar su detalle', async ({ page }) => {
+        const { token } = await getAuthSession(page);
+        const auctions = await fetchAuctions(page, token);
+        const auctionToOpen = auctions.find(isAuctionOpen);
+
+        test.skip(!auctionToOpen, 'No hay subastas activas disponibles para validar detalle.');
+
+        await auctionsPage.openAuction(auctionToOpen!.title);
         await auctionsPage.expectAuctionDetailVisible();
     });
 
-    test('Debe permitir realizar una puja válida', async () => {
-        await auctionsPage.openAuction(auctionsData.validBid.auctionTitle);
-        await auctionsPage.placeBid(String(auctionsData.validBid.bidAmount));
+    test('Debe permitir realizar una puja válida', async ({ page }) => {
+        const { token, userId } = await getAuthSession(page);
+        const auctions = await fetchAuctions(page, token);
+        const targetAuction = auctions.find(auction =>
+            isAuctionOpen(auction) && auction.user?.id !== userId
+        );
 
-        await auctionsPage.expectSuccessMessage(auctionsData.validBid.successMessage);
+        test.skip(!targetAuction, 'No hay subastas activas de terceros para validar puja.');
+
+        await auctionsPage.openAuction(targetAuction!.title);
+
+        const currentBid = await auctionsPage.getCurrentBidAmountOrFallback(targetAuction!.price);
+        const minimumIncrease = await auctionsPage.getMinimumIncreaseAmount();
+
+        await auctionsPage.placeBidAndConfirm();
+        await auctionsPage.expectBidAtLeast(currentBid + minimumIncrease);
     });
 
-    test('Debe mostrar error al realizar una puja inválida', async () => {
-        await auctionsPage.openAuction(auctionsData.invalidBid.auctionTitle);
-        await auctionsPage.placeBid(String(auctionsData.invalidBid.bidAmount));
+    test('Debe mostrar error cuando intenta pujar en su propia subasta', async ({ page }) => {
+        const { token, userId } = await getAuthSession(page);
+        const auctions = await fetchAuctions(page, token);
+        const ownAuction = auctions.find(auction =>
+            isAuctionOpen(auction) && auction.user?.id === userId
+        );
 
-        await auctionsPage.expectErrorMessage(auctionsData.invalidBid.errorMessage);
+        test.skip(!ownAuction, 'No hay subastas propias activas para validar error de puja.');
+
+        await auctionsPage.openAuction(ownAuction!.title);
+
+        const consoleErrorPromise = page.waitForEvent('console', {
+            timeout: 15_000,
+            predicate: (message) =>
+                message.type() === 'error' &&
+                message.text().includes('No puedes pujar en tu propia subasta'),
+        });
+
+        await auctionsPage.placeBidAndConfirm();
+        await consoleErrorPromise;
     });
 });

@@ -6,86 +6,129 @@ import { BasePage } from './base.page';
  * Permite visualizar subastas, abrir el detalle y realizar pujas.
  */
 export class AuctionsPage extends BasePage {
-    /** Campo de búsqueda de subastas. */
-    readonly searchInput: Locator;
-    /** Tarjetas o filas de subastas disponibles. */
+    /** Tarjetas de subastas disponibles. */
     readonly auctionCards: Locator;
-    /** Campo de monto de puja. */
-    readonly bidAmountInput: Locator;
-    /** Botón para enviar la puja. */
+    /** Estado vacío de lista de subastas. */
+    readonly emptyListMessage: Locator;
+    /** Título en el detalle de subasta. */
+    readonly detailTitle: Locator;
+    /** Botón para realizar puja. */
     readonly bidButton: Locator;
-    /** Mensaje de éxito al realizar una puja válida. */
-    readonly successMessage: Locator;
-    /** Mensaje de error al intentar una puja inválida. */
-    readonly errorMessage: Locator;
-    /** Texto con la puja actual o mínima. */
-    readonly currentBidText: Locator;
+    /** Texto del incremento mínimo en detalle. */
+    readonly minimumIncreaseText: Locator;
+    /** Monto de última puja en detalle. */
+    readonly lastBidAmountText: Locator;
+    /** Texto de estado cuando no hay pujas. */
+    readonly noBidsText: Locator;
+    /** Modal de confirmación de SweetAlert2. */
+    readonly bidConfirmationModal: Locator;
+    /** Botón de confirmar en modal de puja. */
+    readonly confirmBidButton: Locator;
 
     /**
      * @param page - Instancia de la página de Playwright inyectada desde el test.
      */
     constructor(page: Page) {
         super(page);
-        this.searchInput = page.locator('input[placeholder*="Buscar"], input[type="search"]');
-        this.auctionCards = page.locator('.auction-card, .card, tbody tr');
-        this.bidAmountInput = page.locator('input[name="bidAmount"], input[type="number"]');
-        this.bidButton = page.locator('button:has-text("Pujar"), button:has-text("Bid")');
-        this.successMessage = page.locator('.alert-success, .toast-success, .success-message');
-        this.errorMessage = page.locator('.alert-danger, .text-danger, .error-message');
-        this.currentBidText = page.locator('.current-bid, .highest-bid, .minimum-bid');
+        this.auctionCards = page.locator('.sales-publications .card');
+        this.emptyListMessage = page.getByText('No hay publicaciones disponibles.');
+        this.detailTitle = page.locator('.title');
+        this.bidButton = page.locator('button.bid-button');
+        this.minimumIncreaseText = page.locator('.minimum-increase');
+        this.lastBidAmountText = page.locator('.last-bid-container .amount');
+        this.noBidsText = page.locator('.no-bids');
+        this.bidConfirmationModal = page.locator('.swal2-popup');
+        this.confirmBidButton = page.getByRole('button', { name: 'Sí, confirmar' });
     }
 
     /** Navega a la página de subastas. */
     async goto(): Promise<void> {
-        await this.navigateTo('/auctions');
+        await this.navigateTo('/app/auctions');
     }
 
     /**
-     * Busca una subasta y abre la primera coincidencia.
+     * Espera a que la lista de subastas termine de cargar.
+     */
+    async waitForAuctionsLoaded(): Promise<void> {
+        await Promise.race([
+            this.auctionCards.first().waitFor({ state: 'visible', timeout: 15_000 }),
+            this.emptyListMessage.waitFor({ state: 'visible', timeout: 15_000 }),
+        ]);
+    }
+
+    /**
+     * Abre una subasta específica por título.
      *
      * @param auctionTitle - Título o nombre de la subasta.
      */
     async openAuction(auctionTitle: string): Promise<void> {
-        await this.searchInput.fill(auctionTitle);
-        await this.auctionCards.first().click();
+        await this.waitForAuctionsLoaded();
+        const selectedCard = this.auctionCards.filter({ hasText: auctionTitle }).first();
+        await expect(selectedCard).toBeVisible();
+        await selectedCard.getByRole('button', { name: 'Detalles' }).click();
+        await expect(this.detailTitle).toBeVisible();
     }
 
     /**
-     * Ingresa un monto y realiza la puja.
-     *
-     * @param amount - Monto de la puja.
+     * Abre el modal de confirmación de puja y confirma la acción.
      */
-    async placeBid(amount: string): Promise<void> {
-        await this.bidAmountInput.fill(amount);
+    async placeBidAndConfirm(): Promise<void> {
+        await expect(this.bidButton).toBeVisible();
+        await expect(this.bidButton).toBeEnabled();
         await this.bidButton.click();
+        await expect(this.bidConfirmationModal).toBeVisible();
+        await this.confirmBidButton.click();
+        await expect(this.bidConfirmationModal).toBeHidden();
     }
 
     /**
-     * Verifica que una puja válida haya sido procesada correctamente.
-     *
-     * @param message - Texto esperado del mensaje de éxito.
+     * Obtiene el incremento mínimo configurado para la subasta actual.
      */
-    async expectSuccessMessage(message: string): Promise<void> {
-        await expect(this.successMessage).toBeVisible();
-        await expect(this.successMessage).toContainText(message);
+    async getMinimumIncreaseAmount(): Promise<number> {
+        const text = (await this.minimumIncreaseText.textContent()) ?? '';
+        return this.parseCurrencyToNumber(text);
     }
 
     /**
-     * Verifica que una puja inválida muestre un mensaje de error.
+     * Obtiene la última puja visible; si no existe, retorna el precio base de fallback.
      *
-     * @param message - Texto esperado del mensaje de error.
+     * @param fallbackAmount - Monto base para usar si no hay pujas aún.
      */
-    async expectErrorMessage(message: string): Promise<void> {
-        await expect(this.errorMessage).toBeVisible();
-        await expect(this.errorMessage).toContainText(message);
+    async getCurrentBidAmountOrFallback(fallbackAmount: number): Promise<number> {
+        if (await this.lastBidAmountText.isVisible().catch(() => false)) {
+            const text = (await this.lastBidAmountText.textContent()) ?? '';
+            return this.parseCurrencyToNumber(text);
+        }
+        return fallbackAmount;
+    }
+
+    /**
+     * Espera hasta que el monto visible de última puja alcance al menos el valor esperado.
+     *
+     * @param expectedMinimum - Monto mínimo esperado después de pujar.
+     */
+    async expectBidAtLeast(expectedMinimum: number): Promise<void> {
+        await expect.poll(async () => {
+            const text = (await this.lastBidAmountText.textContent()) ?? '';
+            return this.parseCurrencyToNumber(text);
+        }, { timeout: 15_000 }).toBeGreaterThanOrEqual(expectedMinimum);
     }
 
     /**
      * Verifica que el detalle principal de la subasta esté visible.
      */
     async expectAuctionDetailVisible(): Promise<void> {
-        await expect(this.bidAmountInput).toBeVisible();
+        await expect(this.detailTitle).toBeVisible();
         await expect(this.bidButton).toBeVisible();
-        await expect(this.currentBidText).toBeVisible();
+        await expect(this.minimumIncreaseText).toBeVisible();
+        await expect(this.lastBidAmountText.or(this.noBidsText)).toBeVisible();
+    }
+
+    /**
+     * Convierte texto monetario a número entero (CRC) para comparaciones en tests.
+     */
+    private parseCurrencyToNumber(value: string): number {
+        const numeric = value.replace(/[^\d]/g, '');
+        return numeric ? Number(numeric) : 0;
     }
 }

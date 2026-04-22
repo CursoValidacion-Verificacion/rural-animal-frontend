@@ -1,7 +1,6 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { LoginPage, CartPage } from '../pages';
 import usersData from '../data/users.json';
-import cartData from '../data/cart-data.json';
 
 /**
  * Suite de pruebas E2E para carrito de compras.
@@ -25,26 +24,34 @@ test.describe('Carrito de Compras @cart @e2e', () => {
         await loginPage.login(buyerUser.email, buyerUser.password);
 
         await page.waitForURL(/\/app\//, { timeout: 15_000 });
+        await cartPage.clearCartStorage();
     });
 
     test('Debe agregar un producto al carrito correctamente', async () => {
-        await cartPage.gotoShop();
-        await cartPage.searchAndAddProduct(cartData.productToAdd.name);
+        await cartPage.gotoSales();
+        const hasSales = await cartPage.hasSalesAvailable();
+        test.skip(!hasSales, 'No hay publicaciones de ventas disponibles para el test de carrito.');
 
-        if (cartData.successMessage) {
-            await cartPage.expectSuccessMessage(cartData.successMessage);
-        }
+        await cartPage.openFirstSaleDetails();
 
-        await cartPage.openCart();
+        const publicationTitle = await cartPage.getCurrentDetailTitle();
+        test.skip(!publicationTitle, 'No se encontró una publicación válida para agregar al carrito.');
+
+        await cartPage.addCurrentPublicationToCart();
+        await cartPage.goToCartFromDetails();
         await cartPage.expectCartHasItems();
-        await expect(cartPage.cartItems.first()).toContainText(cartData.productToAdd.name);
+        await cartPage.expectCartContainsTitle(publicationTitle);
     });
 
     test('Debe eliminar un producto del carrito', async () => {
-        await cartPage.gotoShop();
-        await cartPage.searchAndAddProduct(cartData.productToRemove.name);
+        await cartPage.gotoSales();
+        const hasSales = await cartPage.hasSalesAvailable();
+        test.skip(!hasSales, 'No hay publicaciones de ventas disponibles para el test de carrito.');
 
-        await cartPage.openCart();
+        await cartPage.openFirstSaleDetails();
+        await cartPage.addCurrentPublicationToCart();
+        await cartPage.goToCartFromDetails();
+
         await cartPage.expectCartHasItems();
 
         await cartPage.removeFirstItem();
