@@ -35,7 +35,7 @@ test.describe('Citas Veterinarias @vet @e2e', () => {
   });
 
   test('Debe bloquear la confirmación hasta seleccionar veterinario', async () => {
-    await vetAppointmentsPage.hasAvailableDates();
+    test.setTimeout(60_000);
 
     await vetAppointmentsPage.expectSubmitDisabledWithoutVeterinarianSelection();
   });

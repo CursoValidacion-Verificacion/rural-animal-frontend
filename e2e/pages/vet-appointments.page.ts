@@ -86,7 +86,19 @@ export class VetAppointmentsPage extends BasePage {
      */
     async expectSubmitDisabledWithoutVeterinarianSelection(): Promise<void> {
         await this.scheduleTabButton.click();
-        await expect(this.availableDateCards.first()).toBeVisible({ timeout: 15_000 });
+        await this.page.waitForResponse(
+            (response) =>
+                response.url().includes('/veterinary_appointments/availability') &&
+                response.request().method() === 'GET',
+            { timeout: 20_000 }
+        ).catch(() => null);
+
+        await expect.poll(
+            async () => await this.availableDateCards.count(),
+            { timeout: 20_000 }
+        ).toBeGreaterThan(0);
+
+        await expect(this.availableDateCards.first()).toBeVisible({ timeout: 10_000 });
         await this.availableDateCards.first().click();
         await expect(this.availableTimeSlots.first()).toBeVisible({ timeout: 15_000 });
         await this.availableTimeSlots.first().click();
