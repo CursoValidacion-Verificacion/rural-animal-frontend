@@ -47,6 +47,21 @@ export class VeterinaryAppointmentService extends BaseService<IAppointment> {
     }
 
     /**
+     * Formatea una fecha local al patrón ISO que espera el backend
+     * sin sufijo de zona horaria, ya que el endpoint recibe LocalDateTime.
+     */
+    private formatLocalDateTime(date: Date): string {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+
+        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+    }
+
+    /**
      * Recupera una lista de citas del usuario con parámetros de búsqueda específicos.
      *
      * Esta función ejecuta una búsqueda paginada de citas basándose en los parámetros
@@ -78,8 +93,8 @@ export class VeterinaryAppointmentService extends BaseService<IAppointment> {
         this.loadingSignal.set(true);
 
         const params = {
-            startDate: startDate.toISOString(),
-            endDate: endDate.toISOString()
+            startDate: this.formatLocalDateTime(startDate),
+            endDate: this.formatLocalDateTime(endDate)
         };
 
         return this.findAllWithParamsAndCustomSource('availability', params)

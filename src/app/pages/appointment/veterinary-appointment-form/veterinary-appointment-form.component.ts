@@ -56,8 +56,11 @@ export class VeterinaryAppointmentFormComponent implements OnInit {
      */
     getAvailableDates(): void {
         const startDate = new Date();
+        startDate.setHours(0, 0, 0, 0);
+
         const endDate = new Date();
         endDate.setDate(endDate.getDate() + 3);
+        endDate.setHours(23, 59, 59, 0);
 
         this.veterinaryService.getAvailableDates(startDate, endDate);
     }
